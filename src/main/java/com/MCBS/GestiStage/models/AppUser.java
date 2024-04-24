@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 @Entity
 @Data
@@ -21,7 +22,7 @@ public class AppUser {
     private String password;
     @Column(name = "email", unique = true)
     private String email;
-    private Long dateofbirth;
+    private Date dateofbirth;
     private String phonenumber;
     private String postaladdress;
     private String country;

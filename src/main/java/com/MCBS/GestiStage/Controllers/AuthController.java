@@ -2,7 +2,9 @@ package com.MCBS.GestiStage.Controllers;
 import com.MCBS.GestiStage.config.TokenService;
 import com.MCBS.GestiStage.dtos.request.AppUserDto;
 import com.MCBS.GestiStage.dtos.request.LoginRequest;
+import com.MCBS.GestiStage.dtos.request.StudentDto;
 import com.MCBS.GestiStage.dtos.response.AuthResponseDTO;
+import com.MCBS.GestiStage.dtos.response.RegisterResponseDTO;
 import com.MCBS.GestiStage.models.AppUser;
 import com.MCBS.GestiStage.service.AccountService;
 import org.slf4j.Logger;
@@ -83,24 +85,17 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody AppUserDto appUserDto) {
-
-        System.out.println(appUserDto.getRole());
-        if (accountService.getUserByEmail(appUserDto.getEmail())!=null)
+    public ResponseEntity<RegisterResponseDTO> register(@RequestBody StudentDto studentDto) {
+        if (accountService.getUserByEmail(studentDto.getEmail())!=null)
         {
-            return new ResponseEntity<>("Email address is taken!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(Map.of("message", "Email address is taken!"), HttpStatus.UNAUTHORIZED);
         }
-
-       /*
-        UserEntity user = new UserEntity();
-        user.setUsername(registerDto.getUsername());
-        user.setPassword(passwordEncoder.encode((registerDto.getPassword())));
-        Role roles = roleRepository.findByName("USER").get();
-        user.setRoles(Collections.singletonList(roles));
-        userRepository.save(user);
-        */
-
-        return new ResponseEntity<>("User registered success!", HttpStatus.CREATED);
+        if (!(studentDto.getPassword().equals(studentDto.getConfirmPassword())))
+        {
+            return new ResponseEntity(Map.of("message", "Your passwords do no match"), HttpStatus.UNAUTHORIZED);
+        }
+        accountService.createNewUser(studentDto);
+        return new ResponseEntity(Map.of("message","User registered success!"), HttpStatus.CREATED);
     }
 
 

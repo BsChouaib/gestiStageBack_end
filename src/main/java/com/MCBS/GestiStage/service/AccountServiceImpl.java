@@ -1,5 +1,6 @@
 package com.MCBS.GestiStage.service;
 
+import com.MCBS.GestiStage.converter.StudentDtoConverter;
 import com.MCBS.GestiStage.dtos.request.AdminDto;
 import com.MCBS.GestiStage.dtos.request.AppUserDto;
 import com.MCBS.GestiStage.dtos.request.StudentDto;
@@ -18,11 +19,13 @@ public class AccountServiceImpl implements AccountService {
     private AppUserRepository appUserRepository;
     private AppRoleRepository appRoleRepository;
     private PasswordEncoder passwordEncoder;
+    private StudentDtoConverter studentDtoConverter;
 
-    public AccountServiceImpl(AppUserRepository appUserRepository, AppRoleRepository appRoleRepository, PasswordEncoder passwordEncoder) {
+    public AccountServiceImpl(AppUserRepository appUserRepository, AppRoleRepository appRoleRepository, PasswordEncoder passwordEncoder, StudentDtoConverter studentDtoConverter) {
         this.appUserRepository = appUserRepository;
         this.appRoleRepository = appRoleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.studentDtoConverter = studentDtoConverter;
     }
 
     @Override
@@ -35,7 +38,6 @@ public class AccountServiceImpl implements AccountService {
             // check email address
             // Pokemon pokemon = pokemonRepository.findById(pokemonId).orElseThrow(() -> new PokemonNotFoundException("Pokemon with associated review not found"));
             Admin newAppUser = appUserRepository.save(appUser);
-            System.out.println(mapAdminToDto(newAppUser));
             return mapAdminToDto(newAppUser);
         }
         else if(appUserDto instanceof TeacherDto)
@@ -45,17 +47,25 @@ public class AccountServiceImpl implements AccountService {
             // check email address
             // Pokemon pokemon = pokemonRepository.findById(pokemonId).orElseThrow(() -> new PokemonNotFoundException("Pokemon with associated review not found"));
             Teacher newAppUser = appUserRepository.save(appUser);
-            System.out.println(mapTeacherToDto(newAppUser));
             return mapTeacherToDto(newAppUser);
         }
         else if(appUserDto instanceof StudentDto)
         {
-            String roleName = appUserDto.getRole();
-            Student appUser = mapStudentToEntity(roleName,(StudentDto)appUserDto);
-            // check email address
-            // Pokemon pokemon = pokemonRepository.findById(pokemonId).orElseThrow(() -> new PokemonNotFoundException("Pokemon with associated review not found"));
-            Student newAppUser = appUserRepository.save(appUser);
-            System.out.println(mapStudentToDto(newAppUser));
+            Student student = new Student();
+            student.setFirstname(appUserDto.getFirstname());
+            student.setLastname(appUserDto.getLastname());
+            student.setPassword(passwordEncoder.encode(appUserDto.getPassword()));
+            student.setEmail(appUserDto.getEmail());
+            student.setDateofbirth(appUserDto.getDateofbirth());
+            student.setPhonenumber(appUserDto.getPhonenumber());
+            student.setPostaladdress(appUserDto.getPostaladdress());
+            student.setCountry(appUserDto.getCountry());
+            student.setCity(appUserDto.getCity());
+            student.setPostalcode(appUserDto.getPostalcode());
+            student.setGender(appUserDto.getGender());
+            student.setIsActive(false);
+
+            Student newAppUser = appUserRepository.save(student);
             return mapStudentToDto(newAppUser);
         }
         else
@@ -113,7 +123,6 @@ public class AccountServiceImpl implements AccountService {
         adminDto.setCity(admin.getCity());
         adminDto.setPostalcode(admin.getPostalcode());
         adminDto.setGender(admin.getGender());
-        adminDto.setIsActive(admin.getIsActive());
         adminDto.setRole("ADMIN");
         adminDto.setNationality(admin.getNationality());
         /*adminDto.setAccountcreationdate(admin.getAccountcreationdate());
@@ -160,7 +169,6 @@ public class AccountServiceImpl implements AccountService {
         studentDto.setCity(student.getCity());
         studentDto.setPostalcode(student.getPostalcode());
         studentDto.setGender(student.getGender());
-        studentDto.setIsActive(student.getIsActive());
         studentDto.setRole("STUDENT");
         studentDto.setNationality(student.getNationality());
         studentDto.setCurrentStudyLevel(student.getCurrentStudyLevel());
@@ -208,7 +216,6 @@ public class AccountServiceImpl implements AccountService {
         teacherDto.setCity(teacher.getCity());
         teacherDto.setPostalcode(teacher.getPostalcode());
         teacherDto.setGender(teacher.getGender());
-        teacherDto.setIsActive(teacher.getIsActive());
         teacherDto.setRole("TEACHER");
         teacherDto.setNationality(teacher.getNationality());
         teacherDto.setSubjectTaught(teacher.getSubjectTaught());
