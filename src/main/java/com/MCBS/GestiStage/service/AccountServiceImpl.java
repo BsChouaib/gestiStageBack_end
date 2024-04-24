@@ -137,7 +137,7 @@ public class AccountServiceImpl implements AccountService {
         student.setCity(studentDto.getCity());
         student.setPostalcode(studentDto.getPostalcode());
         student.setGender(studentDto.getGender());
-        student.setIsActive(true);
+        student.setIsActive(false);
         student.getAppRoles().add(appRole);
         student.setNationality(studentDto.getNationality());
         student.setCurrentStudyLevel(studentDto.getCurrentStudyLevel());
