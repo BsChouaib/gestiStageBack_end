@@ -51,21 +51,11 @@ public class AccountServiceImpl implements AccountService {
         }
         else if(appUserDto instanceof StudentDto)
         {
-            Student student = new Student();
-            student.setFirstname(appUserDto.getFirstname());
-            student.setLastname(appUserDto.getLastname());
-            student.setPassword(passwordEncoder.encode(appUserDto.getPassword()));
-            student.setEmail(appUserDto.getEmail());
-            student.setDateofbirth(appUserDto.getDateofbirth());
-            student.setPhonenumber(appUserDto.getPhonenumber());
-            student.setPostaladdress(appUserDto.getPostaladdress());
-            student.setCountry(appUserDto.getCountry());
-            student.setCity(appUserDto.getCity());
-            student.setPostalcode(appUserDto.getPostalcode());
-            student.setGender(appUserDto.getGender());
-            student.setIsActive(false);
-
-            Student newAppUser = appUserRepository.save(student);
+            String roleName = appUserDto.getRole();
+            Student appUser = mapStudentToEntity(roleName,(StudentDto) appUserDto);
+            // check email address
+            // Pokemon pokemon = pokemonRepository.findById(pokemonId).orElseThrow(() -> new PokemonNotFoundException("Pokemon with associated review not found"));
+            Student newAppUser = appUserRepository.save(appUser);
             return mapStudentToDto(newAppUser);
         }
         else
