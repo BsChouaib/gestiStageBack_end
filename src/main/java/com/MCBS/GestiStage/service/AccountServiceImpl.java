@@ -5,6 +5,8 @@ import com.MCBS.GestiStage.dtos.request.AdminDto;
 import com.MCBS.GestiStage.dtos.request.AppUserDto;
 import com.MCBS.GestiStage.dtos.request.StudentDto;
 import com.MCBS.GestiStage.dtos.request.TeacherDto;
+import com.MCBS.GestiStage.exceptions.ApiExceptionHandler;
+import com.MCBS.GestiStage.exceptions.ApiRequestException;
 import com.MCBS.GestiStage.models.*;
 import com.MCBS.GestiStage.repository.AppRoleRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,7 +63,7 @@ public class AccountServiceImpl implements AccountService {
         else
         {
             // Handle unknown user type
-            throw new IllegalArgumentException("Unknown user type");
+            throw new ApiRequestException("Unknown user type");
         }
     }
 
