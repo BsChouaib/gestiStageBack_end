@@ -1,20 +1,8 @@
 package com.MCBS.GestiStage.Controllers;
 
-import com.MCBS.GestiStage.dtos.request.LoginRequest;
-import com.MCBS.GestiStage.dtos.request.StudentDto;
-import com.MCBS.GestiStage.dtos.response.AuthResponseDTO;
-import com.MCBS.GestiStage.dtos.response.RegisterResponseDTO;
-import com.MCBS.GestiStage.models.AppUser;
 import com.MCBS.GestiStage.models.Claim;
 import com.MCBS.GestiStage.service.ClaimsService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +22,7 @@ public class ClaimController {
 
     // Endpoint pour créer une réclamation
     @PostMapping
+    @PreAuthorize("hasRole('STUDENT') or hasRole('TEACHER')")
     public void createClaim(@RequestBody Claim claim) {
         claimService.createClaim(claim);
     }
