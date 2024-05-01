@@ -1,5 +1,6 @@
 package com.MCBS.GestiStage.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,4 +34,6 @@ public class AppUser {
     private Boolean isActive;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<AppRole> appRoles = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Claim> Claims = new ArrayList<>();
 }

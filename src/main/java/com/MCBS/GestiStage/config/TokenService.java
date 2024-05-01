@@ -20,7 +20,7 @@ public class TokenService {
     public TokenService(JwtEncoder jwtEncoder) {
         this.jwtEncoder = jwtEncoder;
     }
-    public AuthResponseDTO generateJwtToken(String username,
+    public AuthResponseDTO generateJwtToken(String eamil,
                                                Collection<? extends GrantedAuthority> authorities,
                                                boolean withRefreshToken){
         Map<String,String > idToken=new HashMap<>();
@@ -32,7 +32,7 @@ public class TokenService {
                 .issuer("auth-service")
                 .issuedAt(instant)
                 .expiresAt(instant.plus(withRefreshToken?5:30, ChronoUnit.MINUTES))
-                .subject(username)
+                .subject(eamil)
                 .claim("scope",scope)
                 .build();
         String accessToken = this.jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet)).getTokenValue();
@@ -42,14 +42,14 @@ public class TokenService {
                     .issuer("auth-service")
                     .issuedAt(instant)
                     .expiresAt(instant.plus(10, ChronoUnit.MINUTES))
-                    .subject(username)
+                    .subject(eamil)
                     .build();
             String refreshToken = this.jwtEncoder.encode(JwtEncoderParameters.from(jwtRefreshTokenClaimsSet)).getTokenValue();
             idToken.put("refreshToken",refreshToken);
         }
         AuthResponseDTO authResponseDTO= new AuthResponseDTO(   accessToken,
                                                                 idToken.get("refreshToken"),
-                                                                username,
+                                                                eamil,
                                                                 scope
                                                                 );
         return authResponseDTO;

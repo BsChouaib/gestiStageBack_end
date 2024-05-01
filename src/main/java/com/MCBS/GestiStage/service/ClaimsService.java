@@ -1,16 +1,20 @@
 package com.MCBS.GestiStage.service;
 
+import com.MCBS.GestiStage.dtos.request.ClaimDtoRequest;
+import com.MCBS.GestiStage.dtos.response.ClaimDtoResponse;
+import com.MCBS.GestiStage.enumerations.Status;
 import com.MCBS.GestiStage.models.Claim;
 
 import java.util.List;
 
 public interface ClaimsService {
-    void createClaim(Claim claim);
+    void createClaim(ClaimDtoRequest claim, String email);
 
-    Claim getClaimById(int id);
+    ClaimDtoResponse getClaimById(Long id);
 
-    void updateClaim(Claim claim);
+    void updateClaim(ClaimDtoRequest claim, Long id);
 
-    void deleteClaim(int id);
-    List<Claim> getAllClaimById(int id);
+    void deleteClaim(Long id);
+    List<ClaimDtoResponse> getAllClaims();
+    ClaimDtoResponse updateClaimState(Long id, Status newState);
 }

@@ -85,7 +85,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponseDTO> register(@RequestBody StudentDto studentDto) {
+    public ResponseEntity<RegisterResponseDTO> register(@RequestBody AppUserDto studentDto) {
         if (accountService.getUserByEmail(studentDto.getEmail())!=null)
         {
             return new ResponseEntity(Map.of("message", "Email address is taken!"), HttpStatus.UNAUTHORIZED);

@@ -1,6 +1,7 @@
 package com.MCBS.GestiStage.models;
 
 import com.MCBS.GestiStage.enumerations.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,8 +21,12 @@ public class Claim {
     private long claimId;
     private Date claimDate;
     private String Description;
+    @Enumerated(EnumType.STRING)
     private Status Statut;
-    @OneToOne(fetch = FetchType.EAGER)
+    private String emailSender;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
     private AppUser user;
 
 
