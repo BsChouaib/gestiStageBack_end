@@ -6,8 +6,10 @@ import com.MCBS.GestiStage.dtos.response.ClaimDtoResponse;
 import com.MCBS.GestiStage.enumerations.Status;
 import com.MCBS.GestiStage.models.Claim;
 import com.MCBS.GestiStage.service.ClaimsService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@Api(tags = "Claim end points", description = "Operations for the claim functionality")
 @RequestMapping("/api/claim")
 public class ClaimController {
 
@@ -30,9 +33,10 @@ public class ClaimController {
     // Endpoint pour créer une réclamation
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('SCOPE_STUDENT') or hasAuthority('SCOPE_TEACHER')")
+    @ApiOperation("Create claim authorized by (student or teacher)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
-                                value = "Access Token",
+                                value = "Bearer access token",
                                 required = true,
                                 dataType = "string",
                                 paramType = "header")
@@ -48,9 +52,10 @@ public class ClaimController {
     }
     //
     @GetMapping("/{id}")
+    @ApiOperation("get claim by id authorized by All users")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
-                    value = "Access Token",
+                    value = "Bearer access token",
                     required = true,
                     dataType = "string",
                     paramType = "header")
@@ -62,9 +67,10 @@ public class ClaimController {
     //
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_STUDENT') or hasAuthority('SCOPE_TEACHER')")
+    @ApiOperation("Update claim authorized by (student or teacher)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
-                    value = "Access Token",
+                    value = "Bearer access token",
                     required = true,
                     dataType = "string",
                     paramType = "header")
@@ -79,9 +85,10 @@ public class ClaimController {
     // Endpoint pour supprimer une réclamation
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_STUDENT') or hasAuthority('SCOPE_TEACHER')")
+    @ApiOperation("Delete claim authorized by (student or teacher)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
-                    value = "Access Token",
+                    value = "Bearer access token",
                     required = true,
                     dataType = "string",
                     paramType = "header")
@@ -95,9 +102,10 @@ public class ClaimController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    @ApiOperation("Get all claims authorized only by admin")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
-                    value = "Access Token",
+                    value = "Bearer access token",
                     required = true,
                     dataType = "string",
                     paramType = "header")
@@ -108,11 +116,12 @@ public class ClaimController {
                 claims);
         return ResponseEntity.ok(apiDtoResponse);
     }
-    @PutMapping("/{id}/state")
+    @PutMapping("/{id}/status")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    @ApiOperation("Update status of a claim authorized only by admin")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
-                    value = "Access Token",
+                    value = "Bearer access token",
                     required = true,
                     dataType = "string",
                     paramType = "header")
@@ -123,5 +132,6 @@ public class ClaimController {
         return ResponseEntity.ok(claimDtoResponse);
     }
 
-
 }
+
+
