@@ -19,7 +19,7 @@ import java.util.Date;
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String messageId;
+    private Long messageId;
     private String content;
     private Date sendingDate;
     private String sender;

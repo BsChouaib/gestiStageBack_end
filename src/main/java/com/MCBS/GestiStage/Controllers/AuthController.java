@@ -7,6 +7,7 @@ import com.MCBS.GestiStage.dtos.response.AuthResponseDTO;
 import com.MCBS.GestiStage.dtos.response.RegisterResponseDTO;
 import com.MCBS.GestiStage.models.AppUser;
 import com.MCBS.GestiStage.service.AccountService;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
+
 @Controller
+@Api(tags = "Authentication end points", description = "Operations for the Registration and Log in functionality")
 @RequestMapping("/api/auth")
 public class AuthController {
     private static final Logger LOGGER= LoggerFactory.getLogger(AuthController.class);

@@ -28,29 +28,29 @@ public class DemandController {
     {
         this.demandService = demandService;
     }
-//    @PostMapping("/create/{id}")
-//    @PreAuthorize("hasAuthority('SCOPE_STUDENT')")
-//    @ApiOperation("Create demand authorized by student")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "Authorization",
-//                    value = "Bearer access token",
-//                    required = true,
-//                    dataType = "string",
-//                    paramType = "header")
-//    })
-//    public ResponseEntity<ApiDtoResponse> createDemand(@PathVariable Long id, @RequestParam String subjectId, @RequestParam String cv)
-//    {
-//
-//        System.out.println(subjectId);
-//        System.out.println(cv);
-//
-//
-////        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-////        String useremail = authentication.getName();
-////        demandService.createDemand(demand, useremail);
-////        ApiDtoResponse apiDtoResponse = new ApiDtoResponse("Demand added successfully!!",
-////                null);
-////        return ResponseEntity.ok(apiDtoResponse);
-//        return null;
-//    }
+    @PostMapping("/create/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_STUDENT')")
+    @ApiOperation("Create demand authorized by student")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<ApiDtoResponse> createDemand(@PathVariable Long id, @RequestParam String subjectId, @RequestParam String cv)
+    {
+
+        System.out.println(subjectId);
+        System.out.println(cv);
+
+
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String useremail = authentication.getName();
+//        demandService.createDemand(demand, useremail);
+//        ApiDtoResponse apiDtoResponse = new ApiDtoResponse("Demand added successfully!!",
+//                null);
+//        return ResponseEntity.ok(apiDtoResponse);
+        return null;
+    }
 }
