@@ -9,4 +9,5 @@ public class SubjectDtoResponse {
     private String title;
     private String description;
     private InternshipType internshipType;
+    private String tEmail;
 }

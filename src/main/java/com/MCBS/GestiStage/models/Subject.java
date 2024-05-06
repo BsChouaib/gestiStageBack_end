@@ -22,6 +22,7 @@ public class Subject {
     private long subjectId;
     private String title;
     private String description;
+    private String tEmail;
     @ManyToOne
     @JoinColumn(name = "teacher_id")
     private AppUser teacher;

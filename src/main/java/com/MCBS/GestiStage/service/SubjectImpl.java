@@ -42,6 +42,7 @@ public class SubjectImpl implements  SubjectService {
                 .title(subject.title())
                 .description(subject.description())
                 .internshipType(subject.internshipType())
+                            .tEmail(subject.teacherEmail())
                     .teacher(user)
                 .build());
         }
