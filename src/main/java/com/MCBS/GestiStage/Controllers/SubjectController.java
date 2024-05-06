@@ -104,7 +104,7 @@ public class SubjectController {
                     dataType = "string",
                     paramType = "header")
     })
-    public ResponseEntity<ApiDtoResponse> getAllClaims() {
+    public ResponseEntity<ApiDtoResponse> getAllSubjects() {
         List<SubjectDtoResponse> subjects = subjectService.getAllSubjects();
         ApiDtoResponse apiDtoResponse = new ApiDtoResponse("success",
                 subjects);

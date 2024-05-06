@@ -1,7 +1,6 @@
 package com.MCBS.GestiStage.models;
 
 import com.MCBS.GestiStage.enumerations.Status;
-import com.MCBS.GestiStage.enumerations.TypeInternship;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

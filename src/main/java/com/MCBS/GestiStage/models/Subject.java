@@ -1,6 +1,6 @@
 package com.MCBS.GestiStage.models;
 
-import com.MCBS.GestiStage.enumerations.TypeInternship;
+import com.MCBS.GestiStage.enumerations.InternshipType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,9 +22,11 @@ public class Subject {
     private long subjectId;
     private String title;
     private String description;
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private AppUser teacher;
     @Enumerated(EnumType.STRING)
-    private TypeInternship internshipType;
-
+    private InternshipType internshipType;
     @OneToMany(mappedBy = "subject")
     private List<Demand> demands = new ArrayList<>();
 }

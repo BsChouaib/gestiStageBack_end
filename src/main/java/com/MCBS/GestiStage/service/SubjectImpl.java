@@ -4,7 +4,9 @@ import com.MCBS.GestiStage.converter.SubjectDtoConverter;
 import com.MCBS.GestiStage.dtos.request.SubjectDtoRequest;
 import com.MCBS.GestiStage.dtos.response.SubjectDtoResponse;
 import com.MCBS.GestiStage.exceptions.ApiRequestException;
+import com.MCBS.GestiStage.models.AppUser;
 import com.MCBS.GestiStage.models.Subject;
+import com.MCBS.GestiStage.repository.AppUserRepository;
 import com.MCBS.GestiStage.repository.SubjectRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,22 +21,28 @@ public class SubjectImpl implements  SubjectService {
     private  final SubjectRepository subjectRepository;
 
     private  final SubjectDtoConverter subjectDtoConverter;
+    private  final AppUserRepository appUserRepository;
 
-    public SubjectImpl(SubjectRepository subjectRepository, SubjectDtoConverter subjectDtoConverter) {
+    public SubjectImpl(SubjectRepository subjectRepository, SubjectDtoConverter subjectDtoConverter, AppUserRepository appUserRepository) {
         this.subjectRepository = subjectRepository;
         this.subjectDtoConverter = subjectDtoConverter;
+        this.appUserRepository = appUserRepository;
     }
 
     @Override
     public void createSubject(SubjectDtoRequest subject) {
+        AppUser user = appUserRepository.findByEmail(subject.teacherEmail());
+        if (user == null)
+        {
+            throw new ApiRequestException("User dose not exist in DB!!!");
+        }
         try
         {
             subjectRepository.save(Subject.builder()
                 .title(subject.title())
-                .description(subject
-                        .description())
-                .internshipType(subject
-                        .internshipType())
+                .description(subject.description())
+                .internshipType(subject.internshipType())
+                    .teacher(user)
                 .build());
         }
         catch (Exception e)
@@ -52,9 +60,15 @@ public class SubjectImpl implements  SubjectService {
         {
             throw new ApiRequestException("Claim dose not exist in DB!!!");
         }
+        AppUser user = appUserRepository.findByEmail(subject.teacherEmail());
+        if (user == null)
+        {
+            throw new ApiRequestException("User dose not exist in DB!!!");
+        }
         oldSubject.setTitle(subject.title());
         oldSubject.setDescription(subject.description());
         oldSubject.setInternshipType(subject.internshipType());
+        oldSubject.setTeacher(user);
         subjectRepository.save(oldSubject);
     }
 
