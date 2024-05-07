@@ -15,13 +15,8 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @Builder
 public class Student extends AppUser{
-
-    @Column(name = "current_study_level")
     private String currentStudyLevel;
-    @Column(name = "current_institution")
     private String currentInstitution;
-    @Column(name = "study_field")
     private String studyField;
-    @Column(name = "enrollment_year")
     private int EnrollmentYear;
 }
