@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+import java.util.Date;
+
+
 public class StudentDto extends AppUserDto {
     private String currentStudyLevel;
 
@@ -16,4 +16,64 @@ public class StudentDto extends AppUserDto {
     private String studyField;
 
     private int EnrollmentYear;
+
+    public StudentDto() {
+    }
+
+    public StudentDto(String firstname,
+                      String lastname,
+                      String password,
+                      String confirmPassword,
+                      String email,
+                      Date dateofbirth,
+                      String phonenumber,
+                      String postaladdress,
+                      String country,
+                      String city,
+                      String postalcode,
+                      String gender,
+                      String Nationality,
+                      String role,
+                      String currentStudyLevel,
+                      String currentInstitution,
+                      String studyField,
+                      int enrollmentYear) {
+        super(firstname, lastname, password, confirmPassword, email, dateofbirth, phonenumber, postaladdress, country, city, postalcode, gender, Nationality, role);
+        this.currentStudyLevel = currentStudyLevel;
+        this.currentInstitution = currentInstitution;
+        this.studyField = studyField;
+        EnrollmentYear = enrollmentYear;
+    }
+
+    public String getCurrentStudyLevel() {
+        return currentStudyLevel;
+    }
+
+    public String getCurrentInstitution() {
+        return currentInstitution;
+    }
+
+    public String getStudyField() {
+        return studyField;
+    }
+
+    public int getEnrollmentYear() {
+        return EnrollmentYear;
+    }
+
+    public void setCurrentStudyLevel(String currentStudyLevel) {
+        this.currentStudyLevel = currentStudyLevel;
+    }
+
+    public void setCurrentInstitution(String currentInstitution) {
+        this.currentInstitution = currentInstitution;
+    }
+
+    public void setStudyField(String studyField) {
+        this.studyField = studyField;
+    }
+
+    public void setEnrollmentYear(int enrollmentYear) {
+        EnrollmentYear = enrollmentYear;
+    }
 }

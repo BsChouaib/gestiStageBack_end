@@ -6,9 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher,Long> {
-    @Query("SELECT t FROM Teacher t")
-    List<Teacher> findAllTeaches();
+
+    Teacher findTeacherById(Long id);
+
+    Teacher findTeacherByEmail(String email);
+
+
 }
