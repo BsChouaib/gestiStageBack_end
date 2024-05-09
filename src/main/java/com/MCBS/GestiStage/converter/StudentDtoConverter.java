@@ -1,6 +1,7 @@
 package com.MCBS.GestiStage.converter;
 
 import com.MCBS.GestiStage.dtos.request.StudentDto;
+import com.MCBS.GestiStage.dtos.response.StudentDtoResponse;
 import com.MCBS.GestiStage.models.Student;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -13,10 +14,10 @@ public class StudentDtoConverter {
         this.modelMapper = modelMapper;
     }
 
-    public StudentDto convertToDto(Student student)
+    public StudentDtoResponse convertToDto(Student student)
     {
-        StudentDto studentDto = modelMapper.map(student,StudentDto.class);
-        return studentDto;
+        StudentDtoResponse studentDtoResponse = modelMapper.map(student,StudentDtoResponse.class);
+        return studentDtoResponse;
     }
 
     public Student convertDtoToStudent(StudentDto studentDto)

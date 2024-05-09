@@ -140,9 +140,6 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public void deleteTeacher(Long id) {
         Teacher teacher = teacherRepository.findTeacherById(id);
-
-        System.out.println(teacher);
-
         if (teacher == null)
         {
             throw new ApiRequestException("Teacher dose not exist in DB!!!");

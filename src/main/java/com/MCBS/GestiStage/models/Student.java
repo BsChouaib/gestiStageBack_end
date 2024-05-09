@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import java.util.Date;
 
 @Entity
 @Data
@@ -18,5 +19,5 @@ public class Student extends AppUser{
     private String currentStudyLevel;
     private String currentInstitution;
     private String studyField;
-    private int EnrollmentYear;
+    private Date EnrollmentYear;
 }

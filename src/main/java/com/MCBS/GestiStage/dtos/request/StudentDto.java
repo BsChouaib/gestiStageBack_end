@@ -15,29 +15,12 @@ public class StudentDto extends AppUserDto {
 
     private String studyField;
 
-    private int EnrollmentYear;
+    private Date EnrollmentYear;
 
     public StudentDto() {
     }
 
-    public StudentDto(String firstname,
-                      String lastname,
-                      String password,
-                      String confirmPassword,
-                      String email,
-                      Date dateofbirth,
-                      String phonenumber,
-                      String postaladdress,
-                      String country,
-                      String city,
-                      String postalcode,
-                      String gender,
-                      String Nationality,
-                      String role,
-                      String currentStudyLevel,
-                      String currentInstitution,
-                      String studyField,
-                      int enrollmentYear) {
+    public StudentDto(String firstname, String lastname, String password, String confirmPassword, String email, Date dateofbirth, String phonenumber, String postaladdress, String country, String city, String postalcode, String gender, String Nationality, String role, String currentStudyLevel, String currentInstitution, String studyField, Date enrollmentYear) {
         super(firstname, lastname, password, confirmPassword, email, dateofbirth, phonenumber, postaladdress, country, city, postalcode, gender, Nationality, role);
         this.currentStudyLevel = currentStudyLevel;
         this.currentInstitution = currentInstitution;
@@ -57,7 +40,7 @@ public class StudentDto extends AppUserDto {
         return studyField;
     }
 
-    public int getEnrollmentYear() {
+    public Date getEnrollmentYear() {
         return EnrollmentYear;
     }
 
@@ -73,7 +56,7 @@ public class StudentDto extends AppUserDto {
         this.studyField = studyField;
     }
 
-    public void setEnrollmentYear(int enrollmentYear) {
+    public void setEnrollmentYear(Date enrollmentYear) {
         EnrollmentYear = enrollmentYear;
     }
 }
