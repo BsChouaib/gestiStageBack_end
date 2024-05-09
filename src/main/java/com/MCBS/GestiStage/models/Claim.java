@@ -24,7 +24,7 @@ public class Claim {
     @Enumerated(EnumType.STRING)
     private Status Statut;
     private String emailSender;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private AppUser user;

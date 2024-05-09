@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -72,16 +73,15 @@ public class TeacherController {
     })
     public ResponseEntity<ApiDtoResponse> createTeacher(@RequestBody TeacherDto teacher)
     {
-
         teacherService.createTeacher(teacher);
         ApiDtoResponse apiDtoResponse = new ApiDtoResponse("Teacher added successfully!!",
                 null);
         return ResponseEntity.ok(apiDtoResponse);
     }
     //
-    @PostMapping("/update")
+    @PutMapping("/update/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN') ")
-    @ApiOperation("Create teacher authorized by admin")
+    @ApiOperation("Update teacher authorized by admin")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
                     value = "Bearer access token",
@@ -89,16 +89,17 @@ public class TeacherController {
                     dataType = "string",
                     paramType = "header")
     })
-    public ResponseEntity<ApiDtoResponse> updateTeacher(@RequestBody TeacherDto teacher)
+    public ResponseEntity<ApiDtoResponse> updateTeacher(@RequestBody TeacherDto teacher, @PathVariable Long id)
     {
 
-        ApiDtoResponse apiDtoResponse = new ApiDtoResponse("Teacher added successfully!!",
+        teacherService.updateTeacher(teacher, id);
+        ApiDtoResponse apiDtoResponse = new ApiDtoResponse("Teacher updated successfully!!",
                 null);
         return ResponseEntity.ok(apiDtoResponse);
     }
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN') ")
-    @ApiOperation("Create teacher authorized by admin")
+    @ApiOperation("Delete teacher authorized by admin")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
                     value = "Bearer access token",
@@ -106,10 +107,10 @@ public class TeacherController {
                     dataType = "string",
                     paramType = "header")
     })
-    public ResponseEntity<ApiDtoResponse> deleteTeacher(@RequestBody TeacherDto teacher)
+    public ResponseEntity<ApiDtoResponse> deleteTeacher(@PathVariable Long id)
     {
-
-        ApiDtoResponse apiDtoResponse = new ApiDtoResponse("Teacher added successfully!!",
+        teacherService.deleteTeacher(id);
+        ApiDtoResponse apiDtoResponse = new ApiDtoResponse("Teacher deleted successfully!!",
                 null);
         return ResponseEntity.ok(apiDtoResponse);
     }

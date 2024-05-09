@@ -9,12 +9,9 @@ import java.util.List;
 
 public interface ClaimsService {
     void createClaim(ClaimDtoRequest claim, String email);
-
-    ClaimDtoResponse getClaimById(Long id);
-
     void updateClaim(ClaimDtoRequest claim, Long id);
-
     void deleteClaim(Long id);
+    ClaimDtoResponse getClaimById(Long id);
     List<ClaimDtoResponse> getAllClaims();
     ClaimDtoResponse updateClaimState(Long id, Status newState);
 }
