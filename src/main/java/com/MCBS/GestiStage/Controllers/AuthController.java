@@ -21,6 +21,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -99,6 +100,12 @@ public class AuthController {
         }
         accountService.createNewUser(studentDto);
         return new ResponseEntity(Map.of("message","User registered success!"), HttpStatus.CREATED);
+    }
+
+
+    @DeleteMapping("/cancel")
+    public ResponseEntity<RegisterResponseDTO> deleteToken(@RequestBody AppUserDto studentDto) {
+        return new ResponseEntity(Map.of("message","Access Token canceled successfully"), HttpStatus.CREATED);
     }
 
 

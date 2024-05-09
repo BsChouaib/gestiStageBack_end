@@ -109,4 +109,13 @@ public class ClaimsServiceImpl implements ClaimsService {
         claimRepository.save(claim);
         return claimDtoConverter.convertToDto(claim);
     }
+
+    @Override
+    public List<ClaimDtoResponse> getUserClaims(String email) {
+        List<Claim> claims = claimRepository.findClaimByEmailSender(email);
+        List<ClaimDtoResponse> claimDtos = claims.stream()
+                .map(claim -> claimDtoConverter.convertToDto(claim))
+                .collect(Collectors.toList());
+        return claimDtos;
+    }
 }

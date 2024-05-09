@@ -1,11 +1,9 @@
 package com.MCBS.GestiStage;
 
-import com.MCBS.GestiStage.dtos.request.AdminDto;
-import com.MCBS.GestiStage.dtos.request.AppUserDto;
-import com.MCBS.GestiStage.dtos.request.StudentDto;
-import com.MCBS.GestiStage.dtos.request.TeacherDto;
+import com.MCBS.GestiStage.dtos.request.*;
 import com.MCBS.GestiStage.models.AppRole;
 import com.MCBS.GestiStage.service.AccountService;
+import com.MCBS.GestiStage.service.ClaimsService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,7 +21,7 @@ public class GestiStageApplication {
 
 
 	@Bean
-	CommandLineRunner start(AccountService accountService){
+	CommandLineRunner start(AccountService accountService, ClaimsService claimsService){
 		return args -> {
 			accountService.newRole(AppRole.builder().roleName("STUDENT").build());
 			accountService.newRole(AppRole.builder().roleName("ADMIN").build());
@@ -61,6 +59,7 @@ public class GestiStageApplication {
 			accountService.addRoleToUser("admin","USER");
 			accountService.addRoleToUser("admin","ADMIN");
 			*/
+
 		};
 	}
 

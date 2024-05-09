@@ -132,6 +132,26 @@ public class ClaimController {
         return ResponseEntity.ok(claimDtoResponse);
     }
 
+
+    @GetMapping("/userClaims")
+    @ApiOperation("get claims for the connected user")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<ApiDtoResponse> getUserClaims() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        List<ClaimDtoResponse> claims = claimService.getUserClaims(userEmail);
+        ApiDtoResponse apiDtoResponse = new ApiDtoResponse("success",
+                claims);
+        return ResponseEntity.ok(apiDtoResponse);
+    }
+
 }
 
 
