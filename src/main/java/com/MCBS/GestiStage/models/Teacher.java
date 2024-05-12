@@ -22,8 +22,8 @@ public class Teacher extends  AppUser{
     public Teacher() {
     }
 
-    public Teacher(Long id, String firstname, String lastname, String password, String email, Date dateofbirth, String phonenumber, String postaladdress, String country, String city, String postalcode, String gender, String Nationality, Boolean isActive, List<AppRole> appRoles, List<Claim> Claims, String subjectTaught, String teachingLevel, String experience) {
-        super(id, firstname, lastname, password, email, dateofbirth, phonenumber, postaladdress, country, city, postalcode, gender, Nationality, isActive, appRoles, Claims);
+    public Teacher(Long id, String firstname, String lastname, String password, String email, Date dateofbirth, String phonenumber, String postaladdress, String country, String city, String postalcode, String gender, String nationality, Boolean isActive, List<AppRole> appRoles, List<Claim> claims, String subjectTaught, String teachingLevel, String experience) {
+        super(id, firstname, lastname, password, email, dateofbirth, phonenumber, postaladdress, country, city, postalcode, gender, nationality, isActive, appRoles, claims);
         this.subjectTaught = subjectTaught;
         this.teachingLevel = teachingLevel;
         this.experience = experience;

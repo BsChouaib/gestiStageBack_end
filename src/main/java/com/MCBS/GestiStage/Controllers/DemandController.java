@@ -3,6 +3,9 @@ package com.MCBS.GestiStage.Controllers;
 import com.MCBS.GestiStage.dtos.request.ClaimDtoRequest;
 import com.MCBS.GestiStage.dtos.request.DemandDto;
 import com.MCBS.GestiStage.dtos.response.ApiDtoResponse;
+import com.MCBS.GestiStage.dtos.response.ClaimDtoResponse;
+import com.MCBS.GestiStage.dtos.response.DemandDtoResponse;
+import com.MCBS.GestiStage.enumerations.Status;
 import com.MCBS.GestiStage.service.DemandService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -38,19 +41,34 @@ public class DemandController {
                     dataType = "string",
                     paramType = "header")
     })
-    public ResponseEntity<ApiDtoResponse> createDemand(@PathVariable Long id, @RequestParam String subjectId, @RequestParam String cv)
+    public ResponseEntity<ApiDtoResponse> createDemand(@RequestBody DemandDto demandDto)
     {
 
-        System.out.println(subjectId);
-        System.out.println(cv);
+        System.out.println(demandDto.subjectId());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String useremail = authentication.getName();
+        demandService.createDemand(demandDto, useremail);
+        ApiDtoResponse apiDtoResponse = new ApiDtoResponse("Demand added successfully!!",
+                null);
+        return ResponseEntity.ok(apiDtoResponse);
+//        return null;
+    }
 
 
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String useremail = authentication.getName();
-//        demandService.createDemand(demand, useremail);
-//        ApiDtoResponse apiDtoResponse = new ApiDtoResponse("Demand added successfully!!",
-//                null);
-//        return ResponseEntity.ok(apiDtoResponse);
-        return null;
+    @PutMapping("/{id}/status")
+//    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    @ApiOperation("Update status of a claim authorized only by admin")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<DemandDtoResponse> approveDemand(@PathVariable Long id, @RequestParam Status newState)
+    {
+        DemandDtoResponse demandDtoResponse = demandService.updateDemandState(id,newState);
+        return ResponseEntity.ok(demandDtoResponse);
     }
 }

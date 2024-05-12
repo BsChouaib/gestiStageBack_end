@@ -94,8 +94,7 @@ public class AccountServiceImpl implements AccountService {
         admin.setCountry(adminDto.getCountry());
         admin.setCity(adminDto.getCity());
         admin.setPostalcode(adminDto.getPostalcode());
-        admin.setGender(adminDto.getGender());
-        admin.setIsActive(true);
+        admin.setGender(adminDto.getGender());;
         admin.getAppRoles().add(appRole);
         admin.setNationality(adminDto.getNationality());
         admin.setAccountcreationdate(adminDto.getAccountcreationdate());
@@ -139,7 +138,6 @@ public class AccountServiceImpl implements AccountService {
         student.setCity(studentDto.getCity());
         student.setPostalcode(studentDto.getPostalcode());
         student.setGender(studentDto.getGender());
-        student.setIsActive(false);
         student.getAppRoles().add(appRole);
         student.setNationality(studentDto.getNationality());
         student.setCurrentStudyLevel(studentDto.getCurrentStudyLevel());
@@ -187,7 +185,6 @@ public class AccountServiceImpl implements AccountService {
         teacher.setCity(teacherDto.getCity());
         teacher.setPostalcode(teacherDto.getPostalcode());
         teacher.setGender(teacherDto.getGender());
-        teacher.setIsActive(true);
         teacher.getAppRoles().add(appRole);
         teacher.setNationality(teacherDto.getNationality());
         teacher.setSubjectTaught(teacherDto.getSubjectTaught());

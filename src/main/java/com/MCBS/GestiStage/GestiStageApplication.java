@@ -5,6 +5,7 @@ import com.MCBS.GestiStage.enumerations.InternshipType;
 import com.MCBS.GestiStage.models.AppRole;
 import com.MCBS.GestiStage.service.AccountService;
 import com.MCBS.GestiStage.service.ClaimsService;
+import com.MCBS.GestiStage.service.DemandService;
 import com.MCBS.GestiStage.service.SubjectService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,7 +24,10 @@ public class GestiStageApplication {
 
 
 	@Bean
-	CommandLineRunner start(AccountService accountService, ClaimsService claimsService, SubjectService subjectService){
+	CommandLineRunner start(AccountService accountService,
+							ClaimsService claimsService,
+							SubjectService subjectService,
+							DemandService demandService){
 		return args -> {
 			accountService.newRole(AppRole.builder().roleName("STUDENT").build());
 			accountService.newRole(AppRole.builder().roleName("ADMIN").build());
@@ -142,8 +146,19 @@ public class GestiStageApplication {
 			subjectService.createSubject(subjectDtoRequest8);
 			subjectService.createSubject(subjectDtoRequest9);
 			subjectService.createSubject(subjectDtoRequest10);
-
-
+			// create demands
+			DemandDto demandDto1 = new DemandDto(1L,"cv1.png");
+			DemandDto demandDto2 = new DemandDto(2L,"cv558.png");
+			DemandDto demandDto3 = new DemandDto(1L,"cv16666.png");
+			DemandDto demandDto4 = new DemandDto(3L,"cvxyz.png");
+			DemandDto demandDto5 = new DemandDto(3L,"cv3.png");
+			DemandDto demandDto6 = new DemandDto(10L,"cv10.png");
+			demandService.createDemand(demandDto1,"student@pi.tn");
+			demandService.createDemand(demandDto2,"student1@pi.tn");
+			demandService.createDemand(demandDto3,"student1@pi.tn");
+			demandService.createDemand(demandDto4,"student2@pi.tn");
+			demandService.createDemand(demandDto5,"student2@pi.tn");
+			demandService.createDemand(demandDto6,"student2@pi.tn");
 		};
 	}
 
