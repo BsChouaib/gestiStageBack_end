@@ -1,4 +1,4 @@
-package com.MCBS.GestiStage.service;
+package com.MCBS.GestiStage.service.impl;
 
 import com.MCBS.GestiStage.converter.ClaimDtoConverter;
 import com.MCBS.GestiStage.dtos.request.ClaimDtoRequest;
@@ -9,6 +9,7 @@ import com.MCBS.GestiStage.models.AppUser;
 import com.MCBS.GestiStage.models.Claim;
 import com.MCBS.GestiStage.repository.AppUserRepository;
 import com.MCBS.GestiStage.repository.ClaimRepository;
+import com.MCBS.GestiStage.service.ClaimsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,4 +1,4 @@
-package com.MCBS.GestiStage.service;
+package com.MCBS.GestiStage.service.impl;
 
 import com.MCBS.GestiStage.converter.TeacherDtoConverter;
 import com.MCBS.GestiStage.dtos.request.TeacherDto;
@@ -8,6 +8,7 @@ import com.MCBS.GestiStage.models.AppRole;
 import com.MCBS.GestiStage.models.Teacher;
 import com.MCBS.GestiStage.repository.AppRoleRepository;
 import com.MCBS.GestiStage.repository.TeacherRepository;
+import com.MCBS.GestiStage.service.TeacherService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,6 +1,7 @@
-package com.MCBS.GestiStage.service;
+package com.MCBS.GestiStage.service.impl;
 
 import com.MCBS.GestiStage.dtos.request.DemandDto;
+import com.MCBS.GestiStage.dtos.response.DemandDtoResponse;
 import com.MCBS.GestiStage.enumerations.Status;
 import com.MCBS.GestiStage.exceptions.ApiRequestException;
 import com.MCBS.GestiStage.models.AppUser;
@@ -9,10 +10,12 @@ import com.MCBS.GestiStage.models.Subject;
 import com.MCBS.GestiStage.repository.AppUserRepository;
 import com.MCBS.GestiStage.repository.DemandRepository;
 import com.MCBS.GestiStage.repository.SubjectRepository;
+import com.MCBS.GestiStage.service.DemandService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
@@ -51,5 +54,10 @@ public class DemandServiceImpl implements DemandService {
                 .subject(subject)
                 .build()
                             );
+    }
+
+    @Override
+    public List<DemandDtoResponse> getAllDemands() {
+        return null;
     }
 }
