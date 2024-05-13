@@ -3,6 +3,7 @@ package com.MCBS.GestiStage.service.impl;
 import com.MCBS.GestiStage.converter.DemandDtoConverter;
 import com.MCBS.GestiStage.dtos.request.DemandDto;
 import com.MCBS.GestiStage.dtos.response.DemandDtoResponse;
+import com.MCBS.GestiStage.dtos.response.StudentDtoResponse;
 import com.MCBS.GestiStage.enumerations.InternshipType;
 import com.MCBS.GestiStage.enumerations.Status;
 import com.MCBS.GestiStage.enumerations.presentationRequest;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -71,7 +73,13 @@ public class DemandServiceImpl implements DemandService {
 
     @Override
     public List<DemandDtoResponse> getAllDemands() {
-        return null;
+
+        List<Demand> demands = demandRepository.findAll();
+
+        List<DemandDtoResponse> demandDtoResponses = demands.stream()
+                .map(demand-> demandDtoConverter.convertToDto(demand))
+                .collect(Collectors.toList());
+        return demandDtoResponses;
     }
 
     @Override
@@ -90,9 +98,9 @@ public class DemandServiceImpl implements DemandService {
         //format date(pattern)
         LocalDateTime currentDate = LocalDateTime.now();
         boolean started = false;
+        boolean approved = false;
         if(newState.equals(Status.Approved))
         {
-
             if (demand.getSubject().getInternshipType().equals(InternshipType.EndOfStudiesProject))
             {
                 internshipRepository.save( Internship.builder()
@@ -104,6 +112,7 @@ public class DemandServiceImpl implements DemandService {
                         .dateFin(currentDate.plusMonths(6))
                         .build());
                 started = true;
+                approved = true;
             }
           else if(demand.getSubject().getInternshipType().equals(InternshipType.perfectionnementInternship))
             {
@@ -116,6 +125,7 @@ public class DemandServiceImpl implements DemandService {
                         .dateFin(currentDate.plusMonths(2))
                         .build());
                 started = true;
+                approved = true;
             }
             else
             {
@@ -128,13 +138,38 @@ public class DemandServiceImpl implements DemandService {
                         .dateFin(currentDate.plusMonths(1))
                         .build());
                 started = true;
+                approved = true;
             }
         }
-        if(started)
+        if(started&&approved)
+        {
+            demand.setStatus(newState);
+        }
+        else if(!started)
         {
             demand.setStatus(newState);
         }
         demandRepository.save(demand);
         return demandDtoConverter.convertToDto(demand);
+    }
+
+    @Override
+    public List<DemandDtoResponse> getUserDemands(String email) {
+
+        AppUser user = appUserRepository.findByEmail(email);
+        if (user == null)
+        {
+            throw new ApiRequestException("User dose not exist in DB!!!");
+        }
+
+        List<Demand> demands = demandRepository.findDemandByAppUser(user);
+
+
+        System.out.println(demands);
+
+        List<DemandDtoResponse> demandDtoResponses = demands.stream()
+                .map(demand-> demandDtoConverter.convertToDto(demand))
+                .collect(Collectors.toList());
+        return demandDtoResponses;
     }
 }
