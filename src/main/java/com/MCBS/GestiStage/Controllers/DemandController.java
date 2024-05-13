@@ -43,9 +43,6 @@ public class DemandController {
     })
     public ResponseEntity<ApiDtoResponse> createDemand(@RequestBody DemandDto demandDto)
     {
-
-        System.out.println(demandDto.subjectId());
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String useremail = authentication.getName();
         demandService.createDemand(demandDto, useremail);

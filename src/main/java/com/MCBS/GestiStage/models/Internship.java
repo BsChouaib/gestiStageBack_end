@@ -1,13 +1,13 @@
 package com.MCBS.GestiStage.models;
 
 import com.MCBS.GestiStage.enumerations.presentationRequest;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 
 @Entity
 @Builder
@@ -18,15 +18,15 @@ public class Internship {
     private String titre;
     private String studentName;
     private String teacherName;
-    private Date dateDebut;
-    private Date dateFin;
+    private LocalDateTime dateDebut;
+    private LocalDateTime  dateFin;
     @Enumerated(EnumType.STRING)
     private presentationRequest state;
 
     public Internship() {
     }
 
-    public Internship(Long internshipId, String titre, String studentName, String teacherName, Date dateDebut, Date dateFin, presentationRequest state) {
+    public Internship(Long internshipId, String titre, String studentName, String teacherName, LocalDateTime dateDebut, LocalDateTime dateFin, presentationRequest state) {
         this.internshipId = internshipId;
         this.titre = titre;
         this.studentName = studentName;
@@ -52,12 +52,20 @@ public class Internship {
         return teacherName;
     }
 
-    public Date getDateDebut() {
+    public LocalDateTime getDateDebut() {
         return dateDebut;
     }
 
-    public Date getDateFin() {
+    public LocalDateTime getDateFin() {
         return dateFin;
+    }
+
+    public void setDateDebut(LocalDateTime dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+
+    public void setDateFin(LocalDateTime dateFin) {
+        this.dateFin = dateFin;
     }
 
     public presentationRequest getState() {
@@ -78,14 +86,6 @@ public class Internship {
 
     public void setTeacherName(String teacherName) {
         this.teacherName = teacherName;
-    }
-
-    public void setDateDebut(Date dateDebut) {
-        this.dateDebut = dateDebut;
-    }
-
-    public void setDateFin(Date dateFin) {
-        this.dateFin = dateFin;
     }
 
     public void setState(presentationRequest state) {

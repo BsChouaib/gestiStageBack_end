@@ -13,11 +13,15 @@ import com.MCBS.GestiStage.models.Internship;
 import com.MCBS.GestiStage.models.Subject;
 import com.MCBS.GestiStage.repository.AppUserRepository;
 import com.MCBS.GestiStage.repository.DemandRepository;
+import com.MCBS.GestiStage.repository.InternshipRepository;
 import com.MCBS.GestiStage.repository.SubjectRepository;
 import com.MCBS.GestiStage.service.DemandService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -31,12 +35,14 @@ public class DemandServiceImpl implements DemandService {
 
     private final DemandDtoConverter demandDtoConverter;
 
-    public DemandServiceImpl(DemandRepository demandRepository, AppUserRepository appUserRepository, SubjectRepository subjectRepository, DemandDtoConverter demandDtoConverter) {
+    private  final InternshipRepository internshipRepository;
+
+    public DemandServiceImpl(DemandRepository demandRepository, AppUserRepository appUserRepository, SubjectRepository subjectRepository, DemandDtoConverter demandDtoConverter, InternshipRepository internshipRepository) {
         this.demandRepository = demandRepository;
         this.appUserRepository = appUserRepository;
         this.subjectRepository = subjectRepository;
-
         this.demandDtoConverter = demandDtoConverter;
+        this.internshipRepository = internshipRepository;
     }
 
     @Override
@@ -58,7 +64,7 @@ public class DemandServiceImpl implements DemandService {
                 .cv(demand.cv())
                 .status(Status.Pending)
                 .subject(subject)
-                        .appUser(user)
+                .appUser(user)
                 .build()
                             );
     }
@@ -71,26 +77,63 @@ public class DemandServiceImpl implements DemandService {
     @Override
     public DemandDtoResponse updateDemandState(Long id, Status newState) {
         Demand demand = demandRepository.findDemandByDemandtId(id);
-
-        System.out.println(demand.getSubject().getTitle());
-
         if (demand == null)
         {
             throw new ApiRequestException("Demand dose not exist in DB!!!");
         }
+        //
+        String title = demand.getSubject().getTitle();
+        String teacherFirstName = demand.getSubject().getTeacher().getFirstname();
+        String teacherLastName = demand.getSubject().getTeacher().getLastname();
+        String studentFirstName = demand.getAppUser().getFirstname();
+        String studentLastName = demand.getAppUser().getFirstname();
+        //format date(pattern)
+        LocalDateTime currentDate = LocalDateTime.now();
+        boolean started = false;
         if(newState.equals(Status.Approved))
         {
-//            Subject subject =  subjectRepository.findSubjectBySubjectId(demand.)
-//            System.out.println(subject);
-            /*
-            Internship.builder()
-                    .titre(demand.getSubject())
-                    .state(presentationRequest.InProgress)
-                    .dateDebut(new Date())
-                    .teacherName(demand.get)*/
 
+            if (demand.getSubject().getInternshipType().equals(InternshipType.EndOfStudiesProject))
+            {
+                internshipRepository.save( Internship.builder()
+                        .titre(title)
+                        .state(presentationRequest.InProgress)
+                        .dateDebut(currentDate)
+                        .teacherName(teacherFirstName+" " +teacherLastName)
+                        .studentName(studentFirstName+" " +studentLastName)
+                        .dateFin(currentDate.plusMonths(6))
+                        .build());
+                started = true;
+            }
+          else if(demand.getSubject().getInternshipType().equals(InternshipType.perfectionnementInternship))
+            {
+                internshipRepository.save( Internship.builder()
+                        .titre(title)
+                        .state(presentationRequest.InProgress)
+                        .dateDebut(currentDate)
+                        .teacherName(teacherFirstName+" " +teacherLastName)
+                        .studentName(studentFirstName+" " +studentLastName)
+                        .dateFin(currentDate.plusMonths(2))
+                        .build());
+                started = true;
+            }
+            else
+            {
+                internshipRepository.save( Internship.builder()
+                        .titre(title)
+                        .state(presentationRequest.InProgress)
+                        .dateDebut(currentDate)
+                        .teacherName(teacherFirstName+" " +teacherLastName)
+                        .studentName(studentFirstName+" " +studentLastName)
+                        .dateFin(currentDate.plusMonths(1))
+                        .build());
+                started = true;
+            }
         }
-        demand.setStatus(newState);
+        if(started)
+        {
+            demand.setStatus(newState);
+        }
         demandRepository.save(demand);
         return demandDtoConverter.convertToDto(demand);
     }
