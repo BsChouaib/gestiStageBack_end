@@ -1,5 +1,6 @@
 package com.MCBS.GestiStage.service;
 
+import com.MCBS.GestiStage.dtos.request.ClaimDtoRequest;
 import com.MCBS.GestiStage.dtos.request.DemandDto;
 import com.MCBS.GestiStage.dtos.response.ClaimDtoResponse;
 import com.MCBS.GestiStage.dtos.response.DemandDtoResponse;
@@ -15,5 +16,9 @@ public interface DemandService
     DemandDtoResponse updateDemandState(Long id, Status newState);
 
     List<DemandDtoResponse> getUserDemands(String email);
+
+    void updateDemand(DemandDto demandDto, Long id);
+    void deleteDemand(Long id);
+    DemandDtoResponse getDemandById(Long id);
 
 }

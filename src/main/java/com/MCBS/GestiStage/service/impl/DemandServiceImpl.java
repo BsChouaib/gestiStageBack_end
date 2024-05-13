@@ -75,7 +75,6 @@ public class DemandServiceImpl implements DemandService {
     public List<DemandDtoResponse> getAllDemands() {
 
         List<Demand> demands = demandRepository.findAll();
-
         List<DemandDtoResponse> demandDtoResponses = demands.stream()
                 .map(demand-> demandDtoConverter.convertToDto(demand))
                 .collect(Collectors.toList());
@@ -155,21 +154,60 @@ public class DemandServiceImpl implements DemandService {
 
     @Override
     public List<DemandDtoResponse> getUserDemands(String email) {
-
         AppUser user = appUserRepository.findByEmail(email);
         if (user == null)
         {
             throw new ApiRequestException("User dose not exist in DB!!!");
         }
-
         List<Demand> demands = demandRepository.findDemandByAppUser(user);
-
-
-        System.out.println(demands);
-
         List<DemandDtoResponse> demandDtoResponses = demands.stream()
                 .map(demand-> demandDtoConverter.convertToDto(demand))
                 .collect(Collectors.toList());
         return demandDtoResponses;
+    }
+
+    // a revoir
+    @Override
+    public void updateDemand(DemandDto demandDto, Long id) {
+        Demand demand = demandRepository.findDemandByDemandtId(id);
+        if (demand == null)
+        {
+            throw new ApiRequestException("Demand dose not exist in DB!!!");
+        }
+        if((demandDto.subjectId()!=null))
+        {
+            Subject subject = subjectRepository.findSubjectBySubjectId(demandDto.subjectId());
+            if (subject == null)
+            {
+                throw new ApiRequestException("Subject dose not exist in DB!!!");
+            }
+            demand.setSubject(subject);
+        }
+        if((demandDto.cv()!=null))
+        {
+            demand.setCv(demandDto.cv());
+        }
+        demandRepository.save(demand);
+    }
+
+    @Override
+    public void deleteDemand(Long id) {
+        Demand demand = demandRepository.findDemandByDemandtId(id);
+        if (demand == null)
+        {
+            throw new ApiRequestException("Demand dose not exist in DB!!!");
+        }
+        demandRepository.delete(demand);
+
+    }
+
+    @Override
+    public DemandDtoResponse getDemandById(Long id) {
+        Demand demand = demandRepository.findDemandByDemandtId(id);
+        if (demand == null)
+        {
+            throw new ApiRequestException("Demand dose not exist in DB!!!");
+        }
+        return demandDtoConverter.convertToDto(demand);
     }
 }

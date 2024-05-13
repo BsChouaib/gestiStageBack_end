@@ -2,7 +2,6 @@ package com.MCBS.GestiStage.Controllers;
 
 import com.MCBS.GestiStage.dtos.request.DemandDto;
 import com.MCBS.GestiStage.dtos.response.ApiDtoResponse;
-import com.MCBS.GestiStage.dtos.response.ClaimDtoResponse;
 import com.MCBS.GestiStage.dtos.response.DemandDtoResponse;
 import com.MCBS.GestiStage.dtos.response.HttpResponse;
 import com.MCBS.GestiStage.enumerations.Status;
@@ -18,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -120,5 +118,71 @@ public class DemandController {
                         .statusCode(OK.value())
                         .build()
         );
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_STUDENT') or hasAuthority('SCOPE_ADMIN')")
+    @ApiOperation("Delete demand authorized by (student or admin)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<HttpResponse> deleteDemand(@PathVariable Long id) {
+        demandService.getDemandById(id);
+        return ResponseEntity.ok().body(
+                HttpResponse.builder()
+                        .timeStamp(new Date().toString())
+                        .message("Demand deleted successfully")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("get demand by id authorized by All users")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<HttpResponse> getDemandById(@PathVariable Long id) {
+        DemandDtoResponse demandDtoResponse = demandService.getDemandById(id);
+        return ResponseEntity.ok().body(
+                HttpResponse.builder()
+                        .timeStamp(new Date().toString())
+                        .message("Demand deleted successfully")
+                        .data(Map.of("Demand", demandDtoResponse))
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_STUDENT') or hasAuthority('SCOPE_ADMIN')")
+    @ApiOperation("Update Demand authorized by (student or admin)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<HttpResponse> updateDemand(@PathVariable Long id, @RequestBody DemandDto demandDto) {
+        demandService.updateDemand(demandDto, id);
+        return ResponseEntity.ok().body(
+                HttpResponse.builder()
+                        .timeStamp(new Date().toString())
+                        .message("Demand updated successfully")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build());
     }
 }
