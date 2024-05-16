@@ -71,32 +71,7 @@ public class DemandController {
         return ResponseEntity.ok(demandDtoResponse);
     }
 
-
     @GetMapping("/all")
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    @ApiOperation("Get all demands authorized only by admin")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization",
-                    value = "Bearer access token",
-                    required = true,
-                    dataType = "string",
-                    paramType = "header")
-    })
-    public ResponseEntity<HttpResponse> getAllDemands() {
-        List<DemandDtoResponse> demands = demandService.getAllDemands();
-        //HttpResponse httpResponse = new HttpResponse();
-        return ResponseEntity.ok().body(
-                HttpResponse.builder()
-                        .timeStamp(new Date().toString())
-                        .data(Map.of("demands",demands))
-                        .message("Demands retried")
-                        .status(OK)
-                        .statusCode(OK.value())
-                        .build()
-        );
-    }
-
-    @GetMapping("/userDemands")
     @ApiOperation("get demands for the connected user")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
@@ -108,7 +83,7 @@ public class DemandController {
     public ResponseEntity<HttpResponse> getUserDemands() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
-        List<DemandDtoResponse> demands = demandService.getUserDemands(userEmail);
+        List<DemandDtoResponse> demands = demandService.getDemands(userEmail);
         return ResponseEntity.ok().body(
                 HttpResponse.builder()
                         .timeStamp(new Date().toString())

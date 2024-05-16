@@ -15,5 +15,5 @@ public interface ClaimsService {
     List<ClaimDtoResponse> getAllClaims();
     ClaimDtoResponse updateClaimState(Long id, Status newState);
 
-    List<ClaimDtoResponse> getUserClaims(String email);
+    List<ClaimDtoResponse> getClaims(String email);
 }

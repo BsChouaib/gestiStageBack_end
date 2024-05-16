@@ -7,6 +7,8 @@ import com.MCBS.GestiStage.enumerations.Status;
 import com.MCBS.GestiStage.exceptions.ApiRequestException;
 import com.MCBS.GestiStage.models.AppUser;
 import com.MCBS.GestiStage.models.Claim;
+import com.MCBS.GestiStage.models.Student;
+import com.MCBS.GestiStage.models.Teacher;
 import com.MCBS.GestiStage.repository.AppUserRepository;
 import com.MCBS.GestiStage.repository.ClaimRepository;
 import com.MCBS.GestiStage.service.ClaimsService;
@@ -112,8 +114,22 @@ public class ClaimsServiceImpl implements ClaimsService {
     }
 
     @Override
-    public List<ClaimDtoResponse> getUserClaims(String email) {
-        List<Claim> claims = claimRepository.findClaimByEmailSender(email);
+    public List<ClaimDtoResponse> getClaims(String email) {
+
+        AppUser user = appUserRepository.findByEmail(email);
+        if (user == null)
+        {
+            throw new ApiRequestException("User dose not exist in DB!!!");
+        }
+        if((user instanceof Student)||(user instanceof Teacher))
+        {
+            List<Claim> claims = claimRepository.findClaimByEmailSender(email);
+            List<ClaimDtoResponse> claimDtos = claims.stream()
+                    .map(claim -> claimDtoConverter.convertToDto(claim))
+                    .collect(Collectors.toList());
+            return claimDtos;
+        }
+        List<Claim> claims = claimRepository.findAll();
         List<ClaimDtoResponse> claimDtos = claims.stream()
                 .map(claim -> claimDtoConverter.convertToDto(claim))
                 .collect(Collectors.toList());

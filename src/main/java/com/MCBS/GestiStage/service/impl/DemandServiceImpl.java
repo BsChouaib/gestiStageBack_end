@@ -8,10 +8,7 @@ import com.MCBS.GestiStage.enumerations.InternshipType;
 import com.MCBS.GestiStage.enumerations.Status;
 import com.MCBS.GestiStage.enumerations.presentationRequest;
 import com.MCBS.GestiStage.exceptions.ApiRequestException;
-import com.MCBS.GestiStage.models.AppUser;
-import com.MCBS.GestiStage.models.Demand;
-import com.MCBS.GestiStage.models.Internship;
-import com.MCBS.GestiStage.models.Subject;
+import com.MCBS.GestiStage.models.*;
 import com.MCBS.GestiStage.repository.AppUserRepository;
 import com.MCBS.GestiStage.repository.DemandRepository;
 import com.MCBS.GestiStage.repository.InternshipRepository;
@@ -69,16 +66,6 @@ public class DemandServiceImpl implements DemandService {
                 .appUser(user)
                 .build()
                             );
-    }
-
-    @Override
-    public List<DemandDtoResponse> getAllDemands() {
-
-        List<Demand> demands = demandRepository.findAll();
-        List<DemandDtoResponse> demandDtoResponses = demands.stream()
-                .map(demand-> demandDtoConverter.convertToDto(demand))
-                .collect(Collectors.toList());
-        return demandDtoResponses;
     }
 
     @Override
@@ -153,13 +140,21 @@ public class DemandServiceImpl implements DemandService {
     }
 
     @Override
-    public List<DemandDtoResponse> getUserDemands(String email) {
+    public List<DemandDtoResponse> getDemands(String email) {
         AppUser user = appUserRepository.findByEmail(email);
         if (user == null)
         {
             throw new ApiRequestException("User dose not exist in DB!!!");
         }
-        List<Demand> demands = demandRepository.findDemandByAppUser(user);
+        if((user instanceof Student)||(user instanceof Teacher))
+        {
+            List<Demand> demands = demandRepository.findDemandByAppUser(user);
+            List<DemandDtoResponse> demandDtoResponses = demands.stream()
+                    .map(demand-> demandDtoConverter.convertToDto(demand))
+                    .collect(Collectors.toList());
+            return demandDtoResponses;
+        }
+        List<Demand> demands = demandRepository.findAll();
         List<DemandDtoResponse> demandDtoResponses = demands.stream()
                 .map(demand-> demandDtoConverter.convertToDto(demand))
                 .collect(Collectors.toList());

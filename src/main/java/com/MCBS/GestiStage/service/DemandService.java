@@ -11,11 +11,10 @@ import java.util.List;
 public interface DemandService
 {
     void createDemand(DemandDto demand, String email);
-    List<DemandDtoResponse> getAllDemands();
 
     DemandDtoResponse updateDemandState(Long id, Status newState);
 
-    List<DemandDtoResponse> getUserDemands(String email);
+    List<DemandDtoResponse> getDemands(String email);
 
     void updateDemand(DemandDto demandDto, Long id);
     void deleteDemand(Long id);

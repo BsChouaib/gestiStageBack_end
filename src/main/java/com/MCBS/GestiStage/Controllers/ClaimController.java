@@ -100,22 +100,6 @@ public class ClaimController {
         return ResponseEntity.ok(apiDtoResponse);
     }
 
-    @GetMapping("/all")
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    @ApiOperation("Get all claims authorized only by admin")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization",
-                    value = "Bearer access token",
-                    required = true,
-                    dataType = "string",
-                    paramType = "header")
-    })
-    public ResponseEntity<ApiDtoResponse> getAllClaims() {
-        List<ClaimDtoResponse> claims = claimService.getAllClaims();
-        ApiDtoResponse apiDtoResponse = new ApiDtoResponse("success",
-                claims);
-        return ResponseEntity.ok(apiDtoResponse);
-    }
     @PutMapping("/{id}/status")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     @ApiOperation("Update status of a claim authorized only by admin")
@@ -133,7 +117,7 @@ public class ClaimController {
     }
 
 
-    @GetMapping("/userClaims")
+    @GetMapping("/all")
     @ApiOperation("get claims for the connected user")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
@@ -142,11 +126,11 @@ public class ClaimController {
                     dataType = "string",
                     paramType = "header")
     })
-    public ResponseEntity<ApiDtoResponse> getUserClaims() {
+    public ResponseEntity<ApiDtoResponse> getClaims() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
-        List<ClaimDtoResponse> claims = claimService.getUserClaims(userEmail);
+        List<ClaimDtoResponse> claims = claimService.getClaims(userEmail);
         ApiDtoResponse apiDtoResponse = new ApiDtoResponse("success",
                 claims);
         return ResponseEntity.ok(apiDtoResponse);
