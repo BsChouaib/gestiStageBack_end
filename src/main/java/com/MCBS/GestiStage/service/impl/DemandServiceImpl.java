@@ -14,9 +14,13 @@ import com.MCBS.GestiStage.repository.DemandRepository;
 import com.MCBS.GestiStage.repository.InternshipRepository;
 import com.MCBS.GestiStage.repository.SubjectRepository;
 import com.MCBS.GestiStage.service.DemandService;
+import com.MCBS.GestiStage.utils.FileUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -45,29 +49,68 @@ public class DemandServiceImpl implements DemandService {
     }
 
     @Override
-    public void createDemand(DemandDto demand, String email)
+    public void createDemand(Long subjectId, String email, MultipartFile cv, MultipartFile motivationLetter) throws IOException
     {
         AppUser user = appUserRepository.findByEmail(email);
         if (user == null)
         {
             throw new ApiRequestException("User dose not exist in DB!!!");
         }
-        Subject subject = subjectRepository.findSubjectBySubjectId(demand.subjectId());
+        Subject subject = subjectRepository.findSubjectBySubjectId(subjectId);
         if (subject == null)
         {
             throw new ApiRequestException("Subject dose not exist in DB!!!");
         }
-        demandRepository.save(
-                Demand.builder()
-                .dateDemande(new Date())
-                .cv(demand.cv())
-                .status(Status.Pending)
-                .subject(subject)
-                .appUser(user)
-                .build()
-                            );
-    }
+        if(cv!= null && motivationLetter!=null )
+        {
+            demandRepository.save(
+                    Demand.builder()
+                            .dateDemande(new Date())
+                            .status(Status.Pending)
+                            .subject(subject)
+                            .appUser(user)
+                            .cv(FileUtils.compressFile(cv.getBytes()))
+                            .motivationletter(FileUtils.compressFile(motivationLetter.getBytes()))
+                            .build()
+            );
+        }
+        else if (cv == null && motivationLetter!=null)
+        {
+            demandRepository.save(
+                    Demand.builder()
+                            .dateDemande(new Date())
+                            .status(Status.Pending)
+                            .subject(subject)
+                            .appUser(user)
+                            .motivationletter(FileUtils.compressFile(motivationLetter.getBytes()))
+                            .build()
+            );
+        }
+        else if (cv != null && motivationLetter == null)
+        {
+            demandRepository.save(
+                    Demand.builder()
+                            .dateDemande(new Date())
+                            .status(Status.Pending)
+                            .subject(subject)
+                            .appUser(user)
+                            .cv(FileUtils.compressFile(cv.getBytes()))
+                            .build()
+            );
+        }
+        else
+        {
+            demandRepository.save(
+                    Demand.builder()
+                            .dateDemande(new Date())
+                            .status(Status.Pending)
+                            .subject(subject)
+                            .appUser(user)
+                            .build()
+            );
+        }
 
+    }
     @Override
     public DemandDtoResponse updateDemandState(Long id, Status newState) {
         Demand demand = demandRepository.findDemandByDemandtId(id);
@@ -93,8 +136,8 @@ public class DemandServiceImpl implements DemandService {
                         .titre(title)
                         .state(presentationRequest.InProgress)
                         .dateDebut(currentDate)
-                        .teacherName(teacherFirstName+" " +teacherLastName)
-                        .studentName(studentFirstName+" " +studentLastName)
+                       // .teacherName(teacherFirstName+" " +teacherLastName)
+                        //.studentName(studentFirstName+" " +studentLastName)
                         .dateFin(currentDate.plusMonths(6))
                         .build());
                 started = true;
@@ -106,8 +149,8 @@ public class DemandServiceImpl implements DemandService {
                         .titre(title)
                         .state(presentationRequest.InProgress)
                         .dateDebut(currentDate)
-                        .teacherName(teacherFirstName+" " +teacherLastName)
-                        .studentName(studentFirstName+" " +studentLastName)
+                        //.teacherName(teacherFirstName+" " +teacherLastName)
+                        //.studentName(studentFirstName+" " +studentLastName)
                         .dateFin(currentDate.plusMonths(2))
                         .build());
                 started = true;
@@ -119,8 +162,8 @@ public class DemandServiceImpl implements DemandService {
                         .titre(title)
                         .state(presentationRequest.InProgress)
                         .dateDebut(currentDate)
-                        .teacherName(teacherFirstName+" " +teacherLastName)
-                        .studentName(studentFirstName+" " +studentLastName)
+                        //.teacherName(teacherFirstName+" " +teacherLastName)
+                        //.studentName(studentFirstName+" " +studentLastName)
                         .dateFin(currentDate.plusMonths(1))
                         .build());
                 started = true;
@@ -169,7 +212,7 @@ public class DemandServiceImpl implements DemandService {
         {
             throw new ApiRequestException("Demand dose not exist in DB!!!");
         }
-        if((demandDto.subjectId()!=null))
+        /*if((demandDto.subjectId()!=null))
         {
             Subject subject = subjectRepository.findSubjectBySubjectId(demandDto.subjectId());
             if (subject == null)
@@ -180,8 +223,8 @@ public class DemandServiceImpl implements DemandService {
         }
         if((demandDto.cv()!=null))
         {
-            demand.setCv(demandDto.cv());
-        }
+            //demand.setCv(demandDto.cv());
+        }*/
         demandRepository.save(demand);
     }
 
@@ -203,6 +246,35 @@ public class DemandServiceImpl implements DemandService {
         {
             throw new ApiRequestException("Demand dose not exist in DB!!!");
         }
+/*
+        byte[] image= FileUtils.decompressFile(demand.getCv());
+        System.out.println(image);
+        String downloadURl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/download/")
+                .path("1")
+                .toUriString();
+       System.out.println(downloadURl);
+        String cvLink = null;
+        String motivationLink = null;
+*/
         return demandDtoConverter.convertToDto(demand);
     }
+
+
+
+
+
+    public byte[] downloadFile(Long id){
+     Demand demand = demandRepository.findDemandByDemandtId(id);
+        if (demand == null)
+        {
+            throw new ApiRequestException("Demand dose not exist in DB!!!");
+        }
+        byte[] file= FileUtils.decompressFile(demand.getCv());
+        return file;
+    }
+
+
+
+
 }

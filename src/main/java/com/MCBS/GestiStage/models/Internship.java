@@ -16,23 +16,28 @@ public class Internship {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long internshipId;
     private String titre;
-    private String studentName;
-    private String teacherName;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Student studentName;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Teacher teacherName;
     private LocalDateTime dateDebut;
     private LocalDateTime  dateFin;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Demand demand;
     @Enumerated(EnumType.STRING)
     private presentationRequest state;
 
     public Internship() {
     }
 
-    public Internship(Long internshipId, String titre, String studentName, String teacherName, LocalDateTime dateDebut, LocalDateTime dateFin, presentationRequest state) {
+    public Internship(Long internshipId, String titre, Student studentName, Teacher teacherName, LocalDateTime dateDebut, LocalDateTime dateFin, Demand demand, presentationRequest state) {
         this.internshipId = internshipId;
         this.titre = titre;
         this.studentName = studentName;
         this.teacherName = teacherName;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+        this.demand = demand;
         this.state = state;
     }
 
@@ -44,11 +49,11 @@ public class Internship {
         return titre;
     }
 
-    public String getStudentName() {
+    public Student getStudentName() {
         return studentName;
     }
 
-    public String getTeacherName() {
+    public Teacher getTeacherName() {
         return teacherName;
     }
 
@@ -60,12 +65,8 @@ public class Internship {
         return dateFin;
     }
 
-    public void setDateDebut(LocalDateTime dateDebut) {
-        this.dateDebut = dateDebut;
-    }
-
-    public void setDateFin(LocalDateTime dateFin) {
-        this.dateFin = dateFin;
+    public Demand getDemand() {
+        return demand;
     }
 
     public presentationRequest getState() {
@@ -80,12 +81,24 @@ public class Internship {
         this.titre = titre;
     }
 
-    public void setStudentName(String studentName) {
+    public void setStudentName(Student studentName) {
         this.studentName = studentName;
     }
 
-    public void setTeacherName(String teacherName) {
+    public void setTeacherName(Teacher teacherName) {
         this.teacherName = teacherName;
+    }
+
+    public void setDateDebut(LocalDateTime dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+
+    public void setDateFin(LocalDateTime dateFin) {
+        this.dateFin = dateFin;
+    }
+
+    public void setDemand(Demand demand) {
+        this.demand = demand;
     }
 
     public void setState(presentationRequest state) {

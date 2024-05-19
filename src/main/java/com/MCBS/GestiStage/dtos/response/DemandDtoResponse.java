@@ -11,7 +11,6 @@ import java.util.Date;
 @Data
 public class DemandDtoResponse {
     private long demandtId;
-    private String cv;
     private Date dateDemande;
     private Status status;
 }

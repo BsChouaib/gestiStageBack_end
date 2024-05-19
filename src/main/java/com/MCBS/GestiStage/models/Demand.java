@@ -15,7 +15,12 @@ public class Demand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long demandtId;
-    private String cv; // Chemin vers le CV
+    @Lob
+    @Column(name = "cv",length = 1000)
+    private byte[] cv; // le cv va étre stocker dans la base de donner sous une fromat byte
+    @Lob
+    @Column(name = "motivationletter",length = 1000)
+    private byte[] motivationletter; // la motivationletter va étre stocker dans la base de donner sous une fromat byte
     @Temporal(TemporalType.DATE)
     private Date dateDemande;
     @Enumerated(EnumType.STRING)
@@ -28,9 +33,10 @@ public class Demand {
     public Demand() {
     }
 
-    public Demand(long demandtId, String cv, Date dateDemande, Status status, Subject subject, AppUser appUser) {
+    public Demand(long demandtId, byte[] cv, byte[] motivationletter, Date dateDemande, Status status, Subject subject, AppUser appUser) {
         this.demandtId = demandtId;
         this.cv = cv;
+        this.motivationletter = motivationletter;
         this.dateDemande = dateDemande;
         this.status = status;
         this.subject = subject;
@@ -41,8 +47,12 @@ public class Demand {
         return demandtId;
     }
 
-    public String getCv() {
+    public byte[] getCv() {
         return cv;
+    }
+
+    public byte[] getMotivationletter() {
+        return motivationletter;
     }
 
     public Date getDateDemande() {
@@ -65,8 +75,12 @@ public class Demand {
         this.demandtId = demandtId;
     }
 
-    public void setCv(String cv) {
+    public void setCv(byte[] cv) {
         this.cv = cv;
+    }
+
+    public void setMotivationletter(byte[] motivationletter) {
+        this.motivationletter = motivationletter;
     }
 
     public void setDateDemande(Date dateDemande) {

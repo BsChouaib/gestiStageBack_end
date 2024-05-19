@@ -145,7 +145,7 @@ public class GestiStageApplication {
 			subjectService.createSubject(subjectDtoRequest9);
 			subjectService.createSubject(subjectDtoRequest10);
 			// create demands
-			DemandDto demandDto1 = new DemandDto(1L,"cv1.png");
+		/*	DemandDto demandDto1 = new DemandDto(1L,01010101 ,01010101 );
 			DemandDto demandDto2 = new DemandDto(2L,"cv558.png");
 			DemandDto demandDto3 = new DemandDto(1L,"cv16666.png");
 			DemandDto demandDto4 = new DemandDto(3L,"cvxyz.png");
@@ -157,6 +157,7 @@ public class GestiStageApplication {
 			demandService.createDemand(demandDto4,"student2@pi.tn");
 			demandService.createDemand(demandDto5,"student2@pi.tn");
 			demandService.createDemand(demandDto6,"student2@pi.tn");
+		 */
 
 			// added StudyFields
 			studyFieldService.addNewStudyField(new StudyFieldDto("IRM-Opt. BD-IA"));

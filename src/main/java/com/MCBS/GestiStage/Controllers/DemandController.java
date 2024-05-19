@@ -4,22 +4,32 @@ import com.MCBS.GestiStage.dtos.request.DemandDto;
 import com.MCBS.GestiStage.dtos.response.DemandDtoResponse;
 import com.MCBS.GestiStage.dtos.response.HttpResponse;
 import com.MCBS.GestiStage.enumerations.Status;
+import com.MCBS.GestiStage.exceptions.ApiRequestException;
+import com.MCBS.GestiStage.models.Demand;
+import com.MCBS.GestiStage.repository.DemandRepository;
 import com.MCBS.GestiStage.service.DemandService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 
 @Controller
@@ -28,12 +38,14 @@ import static org.springframework.http.HttpStatus.OK;
 public class DemandController {
 
     private  final DemandService demandService;
+    private  final DemandRepository demandRepository;
 
-    public DemandController(DemandService demandService)
+    public DemandController(DemandService demandService, DemandRepository demandRepository)
     {
         this.demandService = demandService;
+        this.demandRepository = demandRepository;
     }
-    @PostMapping("/create/{id}")
+    @PostMapping("/create/")
     @PreAuthorize("hasAuthority('SCOPE_STUDENT')")
     @ApiOperation("Create demand authorized by student")
     @ApiImplicitParams({
@@ -43,19 +55,31 @@ public class DemandController {
                     dataType = "string",
                     paramType = "header")
     })
-    public ResponseEntity<HttpResponse> createDemand(@RequestBody DemandDto demandDto)
+    public ResponseEntity<HttpResponse> createDemand(@RequestParam("subjectId")Long subjectId, @RequestParam("cv")MultipartFile cv,@RequestParam("motivationLetter")MultipartFile motivationLetter)
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String useremail = authentication.getName();
-        demandService.createDemand(demandDto, useremail);
-        return ResponseEntity.ok().body(
-                HttpResponse.builder()
-                        .timeStamp(new Date().toString())
-                        .message("Demand created successfully")
-                        .status(OK)
-                        .statusCode(OK.value())
-                        .build());
+        try{
+            demandService.createDemand(subjectId, useremail, cv, motivationLetter);
+            return ResponseEntity.ok().body(
+                    HttpResponse.builder()
+                            .timeStamp(new Date().toString())
+                            .message("Demand created successfully")
+                            .status(OK)
+                            .statusCode(OK.value())
+                            .build());}
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(
+                    HttpResponse.builder()
+                            .timeStamp(new Date().toString())
+                            .message("BAD_REQUEST: " + e.getMessage())
+                            .status(BAD_REQUEST)
+                            .statusCode(BAD_REQUEST.value())
+                            .build());
+        }
     }
+
 
 
     @PutMapping("/{id}/status")
@@ -162,5 +186,43 @@ public class DemandController {
                         .status(OK)
                         .statusCode(OK.value())
                         .build());
+    }
+
+
+
+    @GetMapping("/download/{id}")
+    @ApiOperation("download file")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<?> download(@PathVariable Long id) {
+        byte[] imageData=demandService.downloadFile(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(imageData);
+    }
+
+    @GetMapping("/download/cv/{demandId}")
+    @ApiOperation("download file")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<Resource> downloadCv(@PathVariable Long demandId) {
+        Demand demand = demandRepository.findDemandByDemandtId(demandId);
+        if (demand == null || demand.getCv() == null) {
+            throw new ApiRequestException("Cv not found for demand " + demandId);
+        }
+        ByteArrayResource resource = new ByteArrayResource(demand.getCv());
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=cv_" + demandId + ".pdf")
+                .body(resource);
     }
 }
