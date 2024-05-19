@@ -3,10 +3,7 @@ package com.MCBS.GestiStage;
 import com.MCBS.GestiStage.dtos.request.*;
 import com.MCBS.GestiStage.enumerations.InternshipType;
 import com.MCBS.GestiStage.models.AppRole;
-import com.MCBS.GestiStage.service.AccountService;
-import com.MCBS.GestiStage.service.ClaimsService;
-import com.MCBS.GestiStage.service.DemandService;
-import com.MCBS.GestiStage.service.SubjectService;
+import com.MCBS.GestiStage.service.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,7 +24,8 @@ public class GestiStageApplication {
 	CommandLineRunner start(AccountService accountService,
 							ClaimsService claimsService,
 							SubjectService subjectService,
-							DemandService demandService){
+							DemandService demandService,
+							StudyFieldService studyFieldService){
 		return args -> {
 			accountService.newRole(AppRole.builder().roleName("STUDENT").build());
 			accountService.newRole(AppRole.builder().roleName("ADMIN").build());
@@ -159,6 +157,16 @@ public class GestiStageApplication {
 			demandService.createDemand(demandDto4,"student2@pi.tn");
 			demandService.createDemand(demandDto5,"student2@pi.tn");
 			demandService.createDemand(demandDto6,"student2@pi.tn");
+
+			// added StudyFields
+			studyFieldService.addNewStudyField(new StudyFieldDto("IRM-Opt. BD-IA"));
+			studyFieldService.addNewStudyField(new StudyFieldDto("IRM-Opt. IT finance"));
+			studyFieldService.addNewStudyField(new StudyFieldDto("IRM-Opt. Ingénierie des Systèmes d’Information et du Logiciel"));
+			studyFieldService.addNewStudyField(new StudyFieldDto("IRM-Opt. Ingénierie des Systèmes Embarqués et Mobiles"));
+			studyFieldService.addNewStudyField(new StudyFieldDto("Informatique, Réseaux et Multimédia (IRM)"));
+
+
+
 		};
 	}
 

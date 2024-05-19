@@ -1,10 +1,8 @@
 package com.MCBS.GestiStage.Controllers;
 
 import com.MCBS.GestiStage.dtos.request.StudentDto;
-import com.MCBS.GestiStage.dtos.request.TeacherDto;
 import com.MCBS.GestiStage.dtos.response.ApiDtoResponse;
 import com.MCBS.GestiStage.dtos.response.StudentDtoResponse;
-import com.MCBS.GestiStage.dtos.response.TeacherDtoResponse;
 import com.MCBS.GestiStage.service.StudentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

@@ -1,7 +1,6 @@
 package com.MCBS.GestiStage.Controllers;
 
 import com.MCBS.GestiStage.dtos.request.DemandDto;
-import com.MCBS.GestiStage.dtos.response.ApiDtoResponse;
 import com.MCBS.GestiStage.dtos.response.DemandDtoResponse;
 import com.MCBS.GestiStage.dtos.response.HttpResponse;
 import com.MCBS.GestiStage.enumerations.Status;
@@ -44,14 +43,18 @@ public class DemandController {
                     dataType = "string",
                     paramType = "header")
     })
-    public ResponseEntity<ApiDtoResponse> createDemand(@RequestBody DemandDto demandDto)
+    public ResponseEntity<HttpResponse> createDemand(@RequestBody DemandDto demandDto)
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String useremail = authentication.getName();
         demandService.createDemand(demandDto, useremail);
-        ApiDtoResponse apiDtoResponse = new ApiDtoResponse("Demand added successfully!!",
-                null);
-        return ResponseEntity.ok(apiDtoResponse);
+        return ResponseEntity.ok().body(
+                HttpResponse.builder()
+                        .timeStamp(new Date().toString())
+                        .message("Demand created successfully")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build());
     }
 
 
@@ -106,7 +109,7 @@ public class DemandController {
                     paramType = "header")
     })
     public ResponseEntity<HttpResponse> deleteDemand(@PathVariable Long id) {
-        demandService.getDemandById(id);
+        demandService.deleteDemand(id);
         return ResponseEntity.ok().body(
                 HttpResponse.builder()
                         .timeStamp(new Date().toString())

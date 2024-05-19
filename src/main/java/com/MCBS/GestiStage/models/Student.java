@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,13 +14,14 @@ import java.util.List;
 public class Student extends AppUser{
     private String currentStudyLevel;
     private String currentInstitution;
-    private String studyField;
+    @OneToOne(cascade = CascadeType.ALL)
+    private StudyField studyField;
     private Date EnrollmentYear;
 
     public Student() {
     }
 
-    public Student(Long id, String firstname, String lastname, String password, String email, Date dateofbirth, String phonenumber, String postaladdress, String country, String city, String postalcode, String gender, String nationality, Boolean isActive, List<AppRole> appRoles, List<Claim> claims, String currentStudyLevel, String currentInstitution, String studyField, Date enrollmentYear) {
+    public Student(Long id, String firstname, String lastname, String password, String email, Date dateofbirth, String phonenumber, String postaladdress, String country, String city, String postalcode, String gender, String nationality, Boolean isActive, List<AppRole> appRoles, List<Claim> claims, String currentStudyLevel, String currentInstitution, StudyField studyField, Date enrollmentYear) {
         super(id, firstname, lastname, password, email, dateofbirth, phonenumber, postaladdress, country, city, postalcode, gender, nationality, isActive, appRoles, claims);
         this.currentStudyLevel = currentStudyLevel;
         this.currentInstitution = currentInstitution;
@@ -39,7 +37,7 @@ public class Student extends AppUser{
         return currentInstitution;
     }
 
-    public String getStudyField() {
+    public StudyField getStudyField() {
         return studyField;
     }
 
@@ -55,7 +53,7 @@ public class Student extends AppUser{
         this.currentInstitution = currentInstitution;
     }
 
-    public void setStudyField(String studyField) {
+    public void setStudyField(StudyField studyField) {
         this.studyField = studyField;
     }
 

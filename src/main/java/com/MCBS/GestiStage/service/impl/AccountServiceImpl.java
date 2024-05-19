@@ -142,7 +142,7 @@ public class AccountServiceImpl implements AccountService {
         student.setNationality(studentDto.getNationality());
         student.setCurrentStudyLevel(studentDto.getCurrentStudyLevel());
         student.setCurrentInstitution(studentDto.getCurrentInstitution());
-        student.setStudyField(studentDto.getStudyField());
+        //student.setStudyField(studentDto.getStudyField());
         student.setEnrollmentYear(studentDto.getEnrollmentYear());
         return student;
     }
@@ -163,7 +163,7 @@ public class AccountServiceImpl implements AccountService {
         studentDto.setNationality(student.getNationality());
         studentDto.setCurrentStudyLevel(student.getCurrentStudyLevel());
         studentDto.setCurrentInstitution(student.getCurrentInstitution());
-        studentDto.setStudyField(student.getStudyField());
+       // studentDto.setStudyField(new StudyField());
         studentDto.setEnrollmentYear(student.getEnrollmentYear());
         return studentDto;
     }
