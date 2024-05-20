@@ -1,21 +1,16 @@
 package com.MCBS.GestiStage.Controllers;
 
-import com.MCBS.GestiStage.dtos.request.DemandDto;
 import com.MCBS.GestiStage.dtos.response.DemandDtoResponse;
 import com.MCBS.GestiStage.dtos.response.HttpResponse;
 import com.MCBS.GestiStage.enumerations.Status;
-import com.MCBS.GestiStage.exceptions.ApiRequestException;
-import com.MCBS.GestiStage.models.Demand;
+import com.MCBS.GestiStage.models.Files;
 import com.MCBS.GestiStage.repository.DemandRepository;
 import com.MCBS.GestiStage.service.DemandService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,14 +33,12 @@ import static org.springframework.http.HttpStatus.OK;
 public class DemandController {
 
     private  final DemandService demandService;
-    private  final DemandRepository demandRepository;
 
-    public DemandController(DemandService demandService, DemandRepository demandRepository)
+    public DemandController(DemandService demandService)
     {
         this.demandService = demandService;
-        this.demandRepository = demandRepository;
     }
-    @PostMapping("/create/")
+    @PostMapping("/create")
     @PreAuthorize("hasAuthority('SCOPE_STUDENT')")
     @ApiOperation("Create demand authorized by student")
     @ApiImplicitParams({
@@ -55,12 +48,14 @@ public class DemandController {
                     dataType = "string",
                     paramType = "header")
     })
-    public ResponseEntity<HttpResponse> createDemand(@RequestParam("subjectId")Long subjectId, @RequestParam("cv")MultipartFile cv,@RequestParam("motivationLetter")MultipartFile motivationLetter)
+    public ResponseEntity<HttpResponse> createDemand(@RequestParam("subjectId")Long subjectId,
+                                                     @RequestParam(value = "resume", required = false)MultipartFile resume,
+                                                     @RequestParam(value = "motivationLetter", required = false)MultipartFile motivationLetter)
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String useremail = authentication.getName();
+        String userEmail = authentication.getName();
         try{
-            demandService.createDemand(subjectId, useremail, cv, motivationLetter);
+            demandService.createDemand(subjectId, userEmail, resume, motivationLetter);
             return ResponseEntity.ok().body(
                     HttpResponse.builder()
                             .timeStamp(new Date().toString())
@@ -81,6 +76,45 @@ public class DemandController {
     }
 
 
+    @GetMapping("/download/resume/{demandId}")
+    @ApiOperation("download file")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<byte[]> downloadResume(@PathVariable Long demandId) {
+        Files Resume = demandService.downloadResume(demandId);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(Resume.getFileType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + Resume.getFileName()
+                                + "\"")
+                .body(Resume.getData());
+    }
+
+
+    @GetMapping("/download/letter/{demandId}")
+    @ApiOperation("download file")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<byte[]> downloadMotivationLetter(@PathVariable Long demandId) {
+        Files letter = demandService.downloadLetter(demandId);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(letter.getFileType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + letter.getFileName()
+                                + "\"")
+                .body(letter.getData());
+    }
+
 
     @PutMapping("/{id}/status")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
@@ -92,11 +126,19 @@ public class DemandController {
                     dataType = "string",
                     paramType = "header")
     })
-    public ResponseEntity<DemandDtoResponse> approveDemand(@PathVariable Long id, @RequestParam Status newState)
+    public ResponseEntity<HttpResponse> approveDemand(@PathVariable Long id, @RequestParam Status newState)
     {
-        DemandDtoResponse demandDtoResponse = demandService.updateDemandState(id,newState);
-        return ResponseEntity.ok(demandDtoResponse);
+        DemandDtoResponse demandDtoResponse = demandService.updateDemandState(id, newState);
+        return ResponseEntity.ok().body(
+            HttpResponse.builder()
+                    .timeStamp(new Date().toString())
+                    .data(Map.of("demand",demandDtoResponse))
+                    .message("Demand "+ demandDtoResponse.getStatus())
+                    .status(OK)
+                    .statusCode(OK.value())
+                    .build());
     }
+
 
     @GetMapping("/all")
     @ApiOperation("get demands for the connected user")
@@ -122,6 +164,7 @@ public class DemandController {
         );
     }
 
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_STUDENT') or hasAuthority('SCOPE_ADMIN')")
     @ApiOperation("Delete demand authorized by (student or admin)")
@@ -144,8 +187,11 @@ public class DemandController {
         );
     }
 
+
+    // a revoir avec
     @GetMapping("/{id}")
-    @ApiOperation("get demand by id authorized by All users")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    @ApiOperation("get demand by id")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
                     value = "Bearer access token",
@@ -154,19 +200,18 @@ public class DemandController {
                     paramType = "header")
     })
     public ResponseEntity<HttpResponse> getDemandById(@PathVariable Long id) {
-        DemandDtoResponse demandDtoResponse = demandService.getDemandById(id);
+
+        DemandDtoResponse demand = demandService.getDemandById(id);
         return ResponseEntity.ok().body(
                 HttpResponse.builder()
                         .timeStamp(new Date().toString())
-                        .message("Demand deleted successfully")
-                        .data(Map.of("Demand", demandDtoResponse))
+                        .data(Map.of("demand",demand))
+                        .message("Demand retried")
                         .status(OK)
                         .statusCode(OK.value())
                         .build()
         );
     }
-
-
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_STUDENT') or hasAuthority('SCOPE_ADMIN')")
     @ApiOperation("Update Demand authorized by (student or admin)")
@@ -177,52 +222,38 @@ public class DemandController {
                     dataType = "string",
                     paramType = "header")
     })
-    public ResponseEntity<HttpResponse> updateDemand(@PathVariable Long id, @RequestBody DemandDto demandDto) {
-        demandService.updateDemand(demandDto, id);
-        return ResponseEntity.ok().body(
-                HttpResponse.builder()
-                        .timeStamp(new Date().toString())
-                        .message("Demand updated successfully")
-                        .status(OK)
-                        .statusCode(OK.value())
-                        .build());
-    }
-
-
-
-    @GetMapping("/download/{id}")
-    @ApiOperation("download file")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization",
-                    value = "Bearer access token",
-                    required = true,
-                    dataType = "string",
-                    paramType = "header")
-    })
-    public ResponseEntity<?> download(@PathVariable Long id) {
-        byte[] imageData=demandService.downloadFile(id);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(imageData);
-    }
-
-    @GetMapping("/download/cv/{demandId}")
-    @ApiOperation("download file")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization",
-                    value = "Bearer access token",
-                    required = true,
-                    dataType = "string",
-                    paramType = "header")
-    })
-    public ResponseEntity<Resource> downloadCv(@PathVariable Long demandId) {
-        Demand demand = demandRepository.findDemandByDemandtId(demandId);
-        if (demand == null || demand.getCv() == null) {
-            throw new ApiRequestException("Cv not found for demand " + demandId);
+    public ResponseEntity<HttpResponse> updateDemand(   @PathVariable Long id,
+                                                        @RequestParam(value = "subjectId", required = false)Long subjectId,
+                                                        @RequestParam(value = "email", required = false)String email,
+                                                        @RequestParam(value = "resume", required = false)MultipartFile resume,
+                                                        @RequestParam(value = "motivationLetter", required = false)MultipartFile motivationLetter
+                                                    ) {
+        try {
+            demandService.updateDemand( id,
+                                        subjectId,
+                                        email,
+                                        resume,
+                                        motivationLetter
+                                        );
+            return ResponseEntity.ok().body(
+                    HttpResponse.builder()
+                            .timeStamp(new Date().toString())
+                            .message("Demand updated successfully")
+                            .status(OK)
+                            .statusCode(OK.value())
+                            .build());
         }
-        ByteArrayResource resource = new ByteArrayResource(demand.getCv());
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=cv_" + demandId + ".pdf")
-                .body(resource);
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(
+                    HttpResponse.builder()
+                            .timeStamp(new Date().toString())
+                            .message("BAD_REQUEST: " + e.getMessage())
+                            .status(BAD_REQUEST)
+                            .statusCode(BAD_REQUEST.value())
+                            .build());
+
+        }
     }
+
 }

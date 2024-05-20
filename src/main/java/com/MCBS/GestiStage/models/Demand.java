@@ -1,10 +1,7 @@
 package com.MCBS.GestiStage.models;
 
 import com.MCBS.GestiStage.enumerations.Status;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,49 +11,54 @@ import java.util.Date;
 public class Demand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long demandtId;
-    @Lob
-    @Column(name = "cv",length = 1000)
-    private byte[] cv; // le cv va étre stocker dans la base de donner sous une fromat byte
-    @Lob
-    @Column(name = "motivationletter",length = 1000)
-    private byte[] motivationletter; // la motivationletter va étre stocker dans la base de donner sous une fromat byte
+    private long demandId;
+
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Files resume;
+
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Files motivationLetter;
+
+
+
     @Temporal(TemporalType.DATE)
-    private Date dateDemande;
+    private Date demandeDate;
     @Enumerated(EnumType.STRING)
     private Status status;
     @ManyToOne(fetch = FetchType.EAGER)
     private Subject subject;
     @ManyToOne(fetch = FetchType.EAGER)
-    private AppUser appUser;
+    private AppUser student;
 
     public Demand() {
     }
 
-    public Demand(long demandtId, byte[] cv, byte[] motivationletter, Date dateDemande, Status status, Subject subject, AppUser appUser) {
-        this.demandtId = demandtId;
-        this.cv = cv;
-        this.motivationletter = motivationletter;
-        this.dateDemande = dateDemande;
+    public Demand(long demandId, Files resume, Files motivationLetter, Date demandeDate, Status status, Subject subject, AppUser student) {
+        this.demandId = demandId;
+        this.resume = resume;
+        this.motivationLetter = motivationLetter;
+        this.demandeDate = demandeDate;
         this.status = status;
         this.subject = subject;
-        this.appUser = appUser;
+        this.student = student;
     }
 
-    public long getDemandtId() {
-        return demandtId;
+    public long getDemandId() {
+        return demandId;
     }
 
-    public byte[] getCv() {
-        return cv;
+    public Files getResume() {
+        return resume;
     }
 
-    public byte[] getMotivationletter() {
-        return motivationletter;
+    public Files getMotivationLetter() {
+        return motivationLetter;
     }
 
-    public Date getDateDemande() {
-        return dateDemande;
+    public Date getDemandeDate() {
+        return demandeDate;
     }
 
     public Status getStatus() {
@@ -67,24 +69,24 @@ public class Demand {
         return subject;
     }
 
-    public AppUser getAppUser() {
-        return appUser;
+    public AppUser getStudent() {
+        return student;
     }
 
-    public void setDemandtId(long demandtId) {
-        this.demandtId = demandtId;
+    public void setDemandId(long demandId) {
+        this.demandId = demandId;
     }
 
-    public void setCv(byte[] cv) {
-        this.cv = cv;
+    public void setResume(Files resume) {
+        this.resume = resume;
     }
 
-    public void setMotivationletter(byte[] motivationletter) {
-        this.motivationletter = motivationletter;
+    public void setMotivationLetter(Files motivationLetter) {
+        this.motivationLetter = motivationLetter;
     }
 
-    public void setDateDemande(Date dateDemande) {
-        this.dateDemande = dateDemande;
+    public void setDemandeDate(Date demandeDate) {
+        this.demandeDate = demandeDate;
     }
 
     public void setStatus(Status status) {
@@ -95,7 +97,7 @@ public class Demand {
         this.subject = subject;
     }
 
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
+    public void setStudent(AppUser student) {
+        this.student = student;
     }
 }

@@ -16,13 +16,19 @@ public class Internship {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long internshipId;
     private String titre;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Student studentName;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Teacher teacherName;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private  Files internshipReport;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private  Files internshipJournal;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private AppUser student;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private AppUser teacher;
     private LocalDateTime dateDebut;
     private LocalDateTime  dateFin;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Demand demand;
     @Enumerated(EnumType.STRING)
     private presentationRequest state;
@@ -30,11 +36,13 @@ public class Internship {
     public Internship() {
     }
 
-    public Internship(Long internshipId, String titre, Student studentName, Teacher teacherName, LocalDateTime dateDebut, LocalDateTime dateFin, Demand demand, presentationRequest state) {
+    public Internship(Long internshipId, String titre, Files internshipReport, Files internshipJournal, AppUser student, AppUser teacher, LocalDateTime dateDebut, LocalDateTime dateFin, Demand demand, presentationRequest state) {
         this.internshipId = internshipId;
         this.titre = titre;
-        this.studentName = studentName;
-        this.teacherName = teacherName;
+        this.internshipReport = internshipReport;
+        this.internshipJournal = internshipJournal;
+        this.student = student;
+        this.teacher = teacher;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.demand = demand;
@@ -49,12 +57,20 @@ public class Internship {
         return titre;
     }
 
-    public Student getStudentName() {
-        return studentName;
+    public Files getInternshipReport() {
+        return internshipReport;
     }
 
-    public Teacher getTeacherName() {
-        return teacherName;
+    public Files getInternshipJournal() {
+        return internshipJournal;
+    }
+
+    public AppUser getStudent() {
+        return student;
+    }
+
+    public AppUser getTeacher() {
+        return teacher;
     }
 
     public LocalDateTime getDateDebut() {
@@ -81,12 +97,20 @@ public class Internship {
         this.titre = titre;
     }
 
-    public void setStudentName(Student studentName) {
-        this.studentName = studentName;
+    public void setInternshipReport(Files internshipReport) {
+        this.internshipReport = internshipReport;
     }
 
-    public void setTeacherName(Teacher teacherName) {
-        this.teacherName = teacherName;
+    public void setInternshipJournal(Files internshipJournal) {
+        this.internshipJournal = internshipJournal;
+    }
+
+    public void setStudent(AppUser student) {
+        this.student = student;
+    }
+
+    public void setTeacher(AppUser teacher) {
+        this.teacher = teacher;
     }
 
     public void setDateDebut(LocalDateTime dateDebut) {

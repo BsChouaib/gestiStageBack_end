@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface DemandRepository extends JpaRepository<Demand, Long> {
 
-    Demand findDemandByDemandtId(Long id);
+    Demand findDemandByDemandId(Long id);
 
-    List<Demand> findDemandByAppUser(AppUser appUser);
+    List<Demand> findDemandByStudent(AppUser appUser);
 }
