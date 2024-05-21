@@ -145,20 +145,13 @@ public class GestiStageApplication {
 			subjectService.createSubject(subjectDtoRequest9);
 			subjectService.createSubject(subjectDtoRequest10);
 			// create demands
-		/*	DemandDto demandDto1 = new DemandDto(1L,01010101 ,01010101 );
-			DemandDto demandDto2 = new DemandDto(2L,"cv558.png");
-			DemandDto demandDto3 = new DemandDto(1L,"cv16666.png");
-			DemandDto demandDto4 = new DemandDto(3L,"cvxyz.png");
-			DemandDto demandDto5 = new DemandDto(3L,"cv3.png");
-			DemandDto demandDto6 = new DemandDto(10L,"cv10.png");
-			demandService.createDemand(demandDto1,"student@pi.tn");
-			demandService.createDemand(demandDto2,"student1@pi.tn");
-			demandService.createDemand(demandDto3,"student1@pi.tn");
-			demandService.createDemand(demandDto4,"student2@pi.tn");
-			demandService.createDemand(demandDto5,"student2@pi.tn");
-			demandService.createDemand(demandDto6,"student2@pi.tn");
-		 */
-
+			/*demandService.createDemand(1L,"student@pi.tn", null, null);
+			demandService.createDemand(5L,"student1@pi.tn", null, null);
+			demandService.createDemand(6L,"student1@pi.tn", null, null);
+			demandService.createDemand(10L,"student@pi.tn", null, null);
+			demandService.createDemand(3L,"student2@pi.tn", null, null);
+			demandService.createDemand(2L,"student@pi.tn", null, null);
+			*/
 			// added StudyFields
 			studyFieldService.addNewStudyField(new StudyFieldDto("IRM-Opt. BD-IA"));
 			studyFieldService.addNewStudyField(new StudyFieldDto("IRM-Opt. IT finance"));

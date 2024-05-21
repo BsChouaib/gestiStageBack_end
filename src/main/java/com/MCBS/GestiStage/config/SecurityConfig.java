@@ -79,7 +79,6 @@ public class SecurityConfig {
                 .authorizeRequests(auth -> auth.antMatchers("/h2-console/**").permitAll() )
                 .authorizeRequests(auth -> auth.antMatchers("/idToken/**",
                                                             "/api/auth/**",
-                                                            "/api/demand/**",
                                                             "/swagger-ui/**",
                                                             "/swagger-ui.html",
                                                             "/v3/api-docs/**",
