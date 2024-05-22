@@ -1,6 +1,7 @@
 package com.MCBS.GestiStage.models;
 
 import com.MCBS.GestiStage.enumerations.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class Demand {
     @Enumerated(EnumType.STRING)
     private Status status;
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     private Subject subject;
     @ManyToOne(fetch = FetchType.EAGER)
     private AppUser student;
