@@ -17,6 +17,7 @@ public abstract class AppUser {
     private Long id;
     private String firstname;
     private String lastname;
+    @JsonIgnore
     private String password;
     @Column(name = "email", unique = true)
     private String email;
