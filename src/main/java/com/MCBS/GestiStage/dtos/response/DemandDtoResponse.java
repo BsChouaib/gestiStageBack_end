@@ -1,6 +1,7 @@
 package com.MCBS.GestiStage.dtos.response;
 
 import com.MCBS.GestiStage.enumerations.Status;
+import com.MCBS.GestiStage.models.Files;
 import com.MCBS.GestiStage.models.Subject;
 import lombok.Data;
 
@@ -11,15 +12,21 @@ public class DemandDtoResponse {
     private long demandId;
     private Date demandeDate;
     private Status status;
-    private Subject subject;
+
+    private Files resume;
+
+    private Files motivationLetter;
+    private SubjectDtoResponse subject;
 
     public DemandDtoResponse() {
     }
 
-    public DemandDtoResponse(long demandId, Date demandeDate, Status status, Subject subject) {
+    public DemandDtoResponse(long demandId, Date demandeDate, Status status, Files resume, Files motivationLetter, SubjectDtoResponse subject) {
         this.demandId = demandId;
         this.demandeDate = demandeDate;
         this.status = status;
+        this.resume = resume;
+        this.motivationLetter = motivationLetter;
         this.subject = subject;
     }
 
@@ -35,7 +42,15 @@ public class DemandDtoResponse {
         return status;
     }
 
-    public Subject getSubject() {
+    public Files getResume() {
+        return resume;
+    }
+
+    public Files getMotivationLetter() {
+        return motivationLetter;
+    }
+
+    public SubjectDtoResponse getSubject() {
         return subject;
     }
 
@@ -51,7 +66,15 @@ public class DemandDtoResponse {
         this.status = status;
     }
 
-    public void setSubject(Subject subject) {
+    public void setResume(Files resume) {
+        this.resume = resume;
+    }
+
+    public void setMotivationLetter(Files motivationLetter) {
+        this.motivationLetter = motivationLetter;
+    }
+
+    public void setSubject(SubjectDtoResponse subject) {
         this.subject = subject;
     }
 }
