@@ -16,7 +16,7 @@ public interface DemandService
     void createDemand(Long subjectId, String email, MultipartFile cv, MultipartFile motivationLetter) throws IOException;
     Files downloadResume(Long id);
     Files downloadLetter(Long id);
-    DemandDtoResponse updateDemandState(Long id, Status newState);
+    void updateDemandState(Long id, Status newState);
     List<DemandDtoResponse> getDemands(String email);
     void deleteDemand(Long id);
     DemandDtoResponse getDemandById(Long id);

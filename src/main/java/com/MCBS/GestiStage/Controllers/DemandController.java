@@ -114,7 +114,7 @@ public class DemandController {
 
     @PutMapping("/{id}/status")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    @ApiOperation("Update status of a claim authorized only by admin")
+    @ApiOperation("Update status of a demand authorized only by admin")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
                     value = "Bearer access token",
@@ -124,12 +124,12 @@ public class DemandController {
     })
     public ResponseEntity<HttpResponse> approveDemand(@PathVariable Long id, @RequestParam Status newState)
     {
-        DemandDtoResponse demandDtoResponse = demandService.updateDemandState(id, newState);
+
+        demandService.updateDemandState(id, newState);
         return ResponseEntity.ok().body(
             HttpResponse.builder()
                     .timeStamp(new Date().toString())
-                    .data(Map.of("demand",demandDtoResponse))
-                    .message("Demand "+ demandDtoResponse.getStatus())
+                    .message("Demand "+ newState)
                     .status(OK)
                     .statusCode(OK.value())
                     .build());

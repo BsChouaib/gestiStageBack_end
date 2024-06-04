@@ -110,7 +110,7 @@ public class DemandServiceImpl implements DemandService {
     }
 
     @Override
-    public DemandDtoResponse updateDemandState(Long id, Status newState) {
+    public void updateDemandState(Long id, Status newState) {
         Demand demand = demandRepository.findDemandByDemandId(id);
         if (demand == null)
         {
@@ -178,7 +178,7 @@ public class DemandServiceImpl implements DemandService {
             demand.setStatus(newState);
         }
         demandRepository.save(demand);
-        return demandDtoConverter.convertToDto(demand);
+//        return demandDtoConverter.convertToDto(demand);
     }
 
     @Override

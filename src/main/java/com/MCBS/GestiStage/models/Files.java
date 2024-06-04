@@ -1,5 +1,6 @@
 package com.MCBS.GestiStage.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ public class Files {
     private String fileType;
     @Lob
     @Column(length = 1000)
+    @JsonIgnore
     private byte[] data;
 
     public Files() {
