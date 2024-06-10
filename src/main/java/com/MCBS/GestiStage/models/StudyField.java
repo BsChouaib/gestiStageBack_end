@@ -1,36 +1,40 @@
 package com.MCBS.GestiStage.models;
 
 
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class StudyField {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name ="uuid",strategy = "uuid2")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String fieldName;
 
     public StudyField() {
     }
 
-    public StudyField(String fieldName) {
+    public StudyField(Long id, String fieldName) {
+        this.id = id;
         this.fieldName = fieldName;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getFieldName() {
         return fieldName;
     }
 
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getId() {
-        return id;
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
     }
 }

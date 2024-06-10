@@ -12,5 +12,5 @@ public interface SubjectService
     void updateSubject(SubjectDtoRequest subject, Long id);
     SubjectDtoResponse getSubjectId(Long id);
     public void deleteSubject(Long id);
-    List<SubjectDtoResponse> getAllSubjects();
+    List<SubjectDtoResponse> getAllSubjects(String userEmail);
 }

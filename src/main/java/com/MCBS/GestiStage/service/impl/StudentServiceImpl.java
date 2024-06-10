@@ -134,7 +134,7 @@ public class StudentServiceImpl implements StudentService {
         if((studentDto.getCurrentInstitution()!=null))
         {student.setCurrentInstitution(studentDto.getCurrentInstitution());}
         // experience
-        if((studentDto.getStudyField()!=null))
+        // if((studentDto.getStudyField()!=null))
        // {student.setStudyField(studentDto.getStudyField());}
         // EnrollmentYear
         if((studentDto.getEnrollmentYear()!=null))

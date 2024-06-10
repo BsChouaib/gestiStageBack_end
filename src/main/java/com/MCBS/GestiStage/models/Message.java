@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -17,32 +18,23 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long messageId;
-    private String content;
-    private Date sendingDate;
     private String sender;
     private String receiver;
-
+    private String content;
+    private LocalDateTime timestamp;
     public Message() {
     }
 
-    public Message(Long messageId, String content, Date sendingDate, String sender, String receiver) {
+    public Message(Long messageId, String sender, String receiver, String content, LocalDateTime timestamp) {
         this.messageId = messageId;
-        this.content = content;
-        this.sendingDate = sendingDate;
         this.sender = sender;
         this.receiver = receiver;
+        this.content = content;
+        this.timestamp = timestamp;
     }
 
     public Long getMessageId() {
         return messageId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public Date getSendingDate() {
-        return sendingDate;
     }
 
     public String getSender() {
@@ -53,16 +45,16 @@ public class Message {
         return receiver;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
     public void setMessageId(Long messageId) {
         this.messageId = messageId;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setSendingDate(Date sendingDate) {
-        this.sendingDate = sendingDate;
     }
 
     public void setSender(String sender) {
@@ -71,5 +63,13 @@ public class Message {
 
     public void setReceiver(String receiver) {
         this.receiver = receiver;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 }

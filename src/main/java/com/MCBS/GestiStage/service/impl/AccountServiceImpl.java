@@ -8,6 +8,7 @@ import com.MCBS.GestiStage.dtos.request.TeacherDto;
 import com.MCBS.GestiStage.exceptions.ApiRequestException;
 import com.MCBS.GestiStage.models.*;
 import com.MCBS.GestiStage.repository.AppRoleRepository;
+import com.MCBS.GestiStage.repository.StudyFieldRepository;
 import com.MCBS.GestiStage.service.AccountService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,11 +24,14 @@ public class AccountServiceImpl implements AccountService {
     private PasswordEncoder passwordEncoder;
     private StudentDtoConverter studentDtoConverter;
 
-    public AccountServiceImpl(AppUserRepository appUserRepository, AppRoleRepository appRoleRepository, PasswordEncoder passwordEncoder, StudentDtoConverter studentDtoConverter) {
+    private  final StudyFieldRepository studyFieldRepository;
+
+    public AccountServiceImpl(AppUserRepository appUserRepository, AppRoleRepository appRoleRepository, PasswordEncoder passwordEncoder, StudentDtoConverter studentDtoConverter, StudyFieldRepository studyFieldRepository) {
         this.appUserRepository = appUserRepository;
         this.appRoleRepository = appRoleRepository;
         this.passwordEncoder = passwordEncoder;
         this.studentDtoConverter = studentDtoConverter;
+        this.studyFieldRepository = studyFieldRepository;
     }
 
     @Override
@@ -126,6 +130,8 @@ public class AccountServiceImpl implements AccountService {
         // get role from db
         AppRole appRole=appRoleRepository.findByRoleName(roleName);
         //
+        StudyField studyField = studyFieldRepository.findStudyFieldById(studentDto.getStudyFieldId());
+        //
         Student student = new Student();
         student.setFirstname(studentDto.getFirstname());
         student.setLastname(studentDto.getLastname());
@@ -142,7 +148,7 @@ public class AccountServiceImpl implements AccountService {
         student.setNationality(studentDto.getNationality());
         student.setCurrentStudyLevel(studentDto.getCurrentStudyLevel());
         student.setCurrentInstitution(studentDto.getCurrentInstitution());
-        //student.setStudyField(studentDto.getStudyField());
+        student.setStudyField(studyField);
         student.setEnrollmentYear(studentDto.getEnrollmentYear());
         return student;
     }

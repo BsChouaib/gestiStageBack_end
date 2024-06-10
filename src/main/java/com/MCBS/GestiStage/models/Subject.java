@@ -19,7 +19,6 @@ public class Subject {
     private long subjectId;
     private String title;
     private String description;
-    private String tEmail;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "teacher_id")
     private AppUser teacher;
@@ -27,18 +26,20 @@ public class Subject {
     private InternshipType internshipType;
     @OneToMany(mappedBy = "subject")
     private List<Demand> demands = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.ALL)
+    private StudyField studyField;
 
     public Subject() {
     }
 
-    public Subject(long subjectId, String title, String description, String tEmail, AppUser teacher, InternshipType internshipType, List<Demand> demands) {
+    public Subject(long subjectId, String title, String description, AppUser teacher, InternshipType internshipType, List<Demand> demands, StudyField studyField) {
         this.subjectId = subjectId;
         this.title = title;
         this.description = description;
-        this.tEmail = tEmail;
         this.teacher = teacher;
         this.internshipType = internshipType;
         this.demands = demands;
+        this.studyField = studyField;
     }
 
     public long getSubjectId() {
@@ -53,10 +54,6 @@ public class Subject {
         return description;
     }
 
-    public String gettEmail() {
-        return tEmail;
-    }
-
     public AppUser getTeacher() {
         return teacher;
     }
@@ -67,6 +64,10 @@ public class Subject {
 
     public List<Demand> getDemands() {
         return demands;
+    }
+
+    public StudyField getStudyField() {
+        return studyField;
     }
 
     public void setSubjectId(long subjectId) {
@@ -81,10 +82,6 @@ public class Subject {
         this.description = description;
     }
 
-    public void settEmail(String tEmail) {
-        this.tEmail = tEmail;
-    }
-
     public void setTeacher(AppUser teacher) {
         this.teacher = teacher;
     }
@@ -95,5 +92,9 @@ public class Subject {
 
     public void setDemands(List<Demand> demands) {
         this.demands = demands;
+    }
+
+    public void setStudyField(StudyField studyField) {
+        this.studyField = studyField;
     }
 }

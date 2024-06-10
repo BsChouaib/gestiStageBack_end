@@ -3,6 +3,7 @@ package com.MCBS.GestiStage;
 import com.MCBS.GestiStage.dtos.request.*;
 import com.MCBS.GestiStage.enumerations.InternshipType;
 import com.MCBS.GestiStage.models.AppRole;
+import com.MCBS.GestiStage.models.Files;
 import com.MCBS.GestiStage.service.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,6 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import com.MCBS.GestiStage.config.RsaKeyProperties;
+
+import java.util.Date;
 
 @SpringBootApplication
 @EnableConfigurationProperties(RsaKeyProperties.class)
@@ -27,6 +30,13 @@ public class GestiStageApplication {
 							DemandService demandService,
 							StudyFieldService studyFieldService){
 		return args -> {
+			// added StudyFields
+			studyFieldService.addNewStudyField(new StudyFieldDto("IRM-Opt. BD-IA"));
+			studyFieldService.addNewStudyField(new StudyFieldDto("IRM-Opt. IT finance"));
+			studyFieldService.addNewStudyField(new StudyFieldDto("IRM-Opt. Ingénierie des Systèmes d’Information et du Logiciel"));
+			studyFieldService.addNewStudyField(new StudyFieldDto("IRM-Opt. Ingénierie des Systèmes Embarqués et Mobiles"));
+			studyFieldService.addNewStudyField(new StudyFieldDto("Informatique, Réseaux et Multimédia (IRM)"));
+			//
 			accountService.newRole(AppRole.builder().roleName("STUDENT").build());
 			accountService.newRole(AppRole.builder().roleName("ADMIN").build());
 			accountService.newRole(AppRole.builder().roleName("TEACHER").build());
@@ -47,6 +57,32 @@ public class GestiStageApplication {
 			student.setGender("M");
 			student.setPassword("123456");
 			student.setRole("STUDENT");
+
+
+
+
+
+			AppUserDto student13 = 	new StudentDto(	"student13Fristname",
+													"student13Lastname",
+													"123456","123456",
+													"student13@pi.tn",
+													new Date(),
+													"+21627823600",
+													"2074",
+													"Tunisia",
+													"EL Mourouj",
+												"2074",
+													"M",
+											"TUNISIAN",
+												"STUDENT",
+										"1",
+										"polytech",
+											1L,
+													new Date()
+													);
+			accountService.createNewUser(student13);
+
+			//
 			AppUserDto student1 = new StudentDto();
 			student1.setFirstname("student2Fristname");
 			student1.setLastname("student2Lastname");
@@ -89,7 +125,7 @@ public class GestiStageApplication {
 			accountService.createNewUser(teacher);
 			accountService.createNewUser(teacher1);
 			accountService.createNewUser(teacher2);
-			/*
+            /*
 			accountService.addRoleToUser("user1","USER");
 			accountService.addRoleToUser("user2","USER");
 			accountService.addRoleToUser("admin","USER");
@@ -124,16 +160,28 @@ public class GestiStageApplication {
 			claimsService.createClaim(claim12,"teacher1@pi.tn");
 			claimsService.createClaim(claim13,"teacher2@pi.tn");
 
-			SubjectDtoRequest subjectDtoRequest1= new SubjectDtoRequest("dev web","dev web with angular and spring boot framework","teacher2@pi.tn", InternshipType.initiationInternship);
-			SubjectDtoRequest subjectDtoRequest2= new SubjectDtoRequest("dev web","dev web with react and spring boot framework","teacher1@pi.tn", InternshipType.perfectionnementInternship);
-			SubjectDtoRequest subjectDtoRequest3= new SubjectDtoRequest("dev web","dev monolithic app with .Net framework","teacher1@pi.tn", InternshipType.perfectionnementInternship);
-			SubjectDtoRequest subjectDtoRequest4= new SubjectDtoRequest("dev mobile","dev web with angular and spring boot framework","teacher1@pi.tn", InternshipType.EndOfStudiesProject);
-			SubjectDtoRequest subjectDtoRequest5= new SubjectDtoRequest("dev IHM","dev dab with c++","teacher1@pi.tn", InternshipType.initiationInternship);
-			SubjectDtoRequest subjectDtoRequest6= new SubjectDtoRequest("dev sever web","dev web with angular and spring boot framework","teacher@pi.tn", InternshipType.perfectionnementInternship);
-			SubjectDtoRequest subjectDtoRequest7= new SubjectDtoRequest("dev vpn","dev web with angular and spring boot framework","teacher@pi.tn", InternshipType.EndOfStudiesProject);
-			SubjectDtoRequest subjectDtoRequest8= new SubjectDtoRequest("dev retail system","dev web with angular and spring boot framework","teacher@pi.tn", InternshipType.EndOfStudiesProject);
-			SubjectDtoRequest subjectDtoRequest9= new SubjectDtoRequest("dev tracking system","dev web with angular and spring boot framework","teacher@pi.tn", InternshipType.EndOfStudiesProject);
-			SubjectDtoRequest subjectDtoRequest10= new SubjectDtoRequest("dev payment module","dev web with angular and spring boot framework","teacher2@pi.tn", InternshipType.EndOfStudiesProject);
+
+			// create demands
+            /*demandService.createDemand(1L,"student@pi.tn", null, null);
+			demandService.createDemand(5L,"student1@pi.tn", null, null);
+			demandService.createDemand(6L,"student1@pi.tn", null, null);
+			demandService.createDemand(10L,"student@pi.tn", null, null);
+			demandService.createDemand(3L,"student2@pi.tn", null, null);
+			demandService.createDemand(2L,"student@pi.tn", null, null);
+			*/
+
+
+			// add subject
+			SubjectDtoRequest subjectDtoRequest1= new SubjectDtoRequest("dev web","dev web with angular and spring boot framework","teacher2@pi.tn", InternshipType.initiationInternship, 1L);
+			SubjectDtoRequest subjectDtoRequest2= new SubjectDtoRequest("dev web","dev web with react and spring boot framework","teacher1@pi.tn", InternshipType.perfectionnementInternship, 4L);
+			SubjectDtoRequest subjectDtoRequest3= new SubjectDtoRequest("dev web","dev monolithic app with .Net framework","teacher1@pi.tn", InternshipType.perfectionnementInternship, 2L);
+			SubjectDtoRequest subjectDtoRequest4= new SubjectDtoRequest("dev mobile","dev web with angular and spring boot framework","teacher1@pi.tn", InternshipType.EndOfStudiesProject, 3L);
+			SubjectDtoRequest subjectDtoRequest5= new SubjectDtoRequest("dev IHM","dev dab with c++","teacher1@pi.tn", InternshipType.initiationInternship, 1L);
+			SubjectDtoRequest subjectDtoRequest6= new SubjectDtoRequest("dev sever web","dev web with angular and spring boot framework","teacher@pi.tn", InternshipType.perfectionnementInternship, 1L);
+			SubjectDtoRequest subjectDtoRequest7= new SubjectDtoRequest("dev vpn","dev web with angular and spring boot framework","teacher@pi.tn", InternshipType.EndOfStudiesProject, 1L);
+			SubjectDtoRequest subjectDtoRequest8= new SubjectDtoRequest("dev retail system","dev web with angular and spring boot framework","teacher@pi.tn", InternshipType.EndOfStudiesProject,4L);
+			SubjectDtoRequest subjectDtoRequest9= new SubjectDtoRequest("dev tracking system","dev web with angular and spring boot framework","teacher@pi.tn", InternshipType.EndOfStudiesProject,3L);
+			SubjectDtoRequest subjectDtoRequest10= new SubjectDtoRequest("dev payment module","dev web with angular and spring boot framework","teacher2@pi.tn", InternshipType.EndOfStudiesProject, 5L);
 			subjectService.createSubject(subjectDtoRequest1);
 			subjectService.createSubject(subjectDtoRequest2);
 			subjectService.createSubject(subjectDtoRequest3);
@@ -144,22 +192,6 @@ public class GestiStageApplication {
 			subjectService.createSubject(subjectDtoRequest8);
 			subjectService.createSubject(subjectDtoRequest9);
 			subjectService.createSubject(subjectDtoRequest10);
-			// create demands
-			/*demandService.createDemand(1L,"student@pi.tn", null, null);
-			demandService.createDemand(5L,"student1@pi.tn", null, null);
-			demandService.createDemand(6L,"student1@pi.tn", null, null);
-			demandService.createDemand(10L,"student@pi.tn", null, null);
-			demandService.createDemand(3L,"student2@pi.tn", null, null);
-			demandService.createDemand(2L,"student@pi.tn", null, null);
-			*/
-			// added StudyFields
-			studyFieldService.addNewStudyField(new StudyFieldDto("IRM-Opt. BD-IA"));
-			studyFieldService.addNewStudyField(new StudyFieldDto("IRM-Opt. IT finance"));
-			studyFieldService.addNewStudyField(new StudyFieldDto("IRM-Opt. Ingénierie des Systèmes d’Information et du Logiciel"));
-			studyFieldService.addNewStudyField(new StudyFieldDto("IRM-Opt. Ingénierie des Systèmes Embarqués et Mobiles"));
-			studyFieldService.addNewStudyField(new StudyFieldDto("Informatique, Réseaux et Multimédia (IRM)"));
-
-
 
 		};
 	}

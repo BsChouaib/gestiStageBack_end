@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -105,7 +107,9 @@ public class SubjectController {
                     paramType = "header")
     })
     public ResponseEntity<ApiDtoResponse> getAllSubjects() {
-        List<SubjectDtoResponse> subjects = subjectService.getAllSubjects();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        List<SubjectDtoResponse> subjects = subjectService.getAllSubjects(userEmail);
         ApiDtoResponse apiDtoResponse = new ApiDtoResponse("success",
                 subjects);
         return ResponseEntity.ok(apiDtoResponse);
