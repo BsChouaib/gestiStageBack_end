@@ -50,16 +50,26 @@ public class GestiStageApplication {
 			admin.setRole("ADMIN");
 			accountService.createNewUser(admin);
 			// students account
-			AppUserDto student = new StudentDto();
-			student.setFirstname("student1Fristname");
-			student.setLastname("student1Lastname");
-			student.setEmail("student@pi.tn");
-			student.setGender("M");
-			student.setPassword("123456");
-			student.setRole("STUDENT");
+			AppUserDto student = 	new StudentDto(	"student1Fristname",
+					"student1Lastname",
+					"123456","123456",
+					"student@pi.tn",
+					new Date(),
+					"+21627823600",
+					"2074",
+					"Tunisia",
+					"EL Mourouj",
+					"2074",
+					"M",
+					"TUNISIAN",
+					"STUDENT",
+					"1",
+					"polytech",
+					4L,
+					new Date()
+			);
 
-
-
+			accountService.createNewUser(student);
 
 
 			AppUserDto student13 = 	new StudentDto(	"student13Fristname",
@@ -82,24 +92,26 @@ public class GestiStageApplication {
 													);
 			accountService.createNewUser(student13);
 
-			//
-			AppUserDto student1 = new StudentDto();
-			student1.setFirstname("student2Fristname");
-			student1.setLastname("student2Lastname");
-			student1.setEmail("student1@pi.tn");
-			student1.setGender("M");
-			student1.setPassword("123456");
-			student1.setRole("STUDENT");
-			AppUserDto student2 = new StudentDto();
-			student2.setFirstname("student3Fristname");
-			student2.setLastname("student3Lastname");
-			student2.setEmail("student2@pi.tn");
-			student2.setGender("F");
-			student2.setPassword("123456");
-			student2.setRole("STUDENT");
-			accountService.createNewUser(student);
+			AppUserDto student1 = 	new StudentDto(	"student2Fristname",
+					"student2Fristname",
+					"123456","123456",
+					"student1@pi.tn",
+					new Date(),
+					"+21627823600",
+					"2074",
+					"Tunisia",
+					"EL Mourouj",
+					"2074",
+					"M",
+					"TUNISIAN",
+					"STUDENT",
+					"1",
+					"polytech",
+					5L,
+					new Date()
+			);
+
 			accountService.createNewUser(student1);
-			accountService.createNewUser(student2);
 			// teacher account
 			AppUserDto teacher = new TeacherDto();
 			teacher.setFirstname("teacher1Firstname");
