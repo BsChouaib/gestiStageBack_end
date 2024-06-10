@@ -112,6 +112,28 @@ public class GestiStageApplication {
 			);
 
 			accountService.createNewUser(student1);
+
+
+			AppUserDto student2 = 	new StudentDto(	"student3Fristname",
+					"student3Fristname",
+					"123456","123456",
+					"student2@pi.tn",
+					new Date(),
+					"+21627823600",
+					"2074",
+					"Tunisia",
+					"EL Mourouj",
+					"2074",
+					"M",
+					"TUNISIAN",
+					"STUDENT",
+					"1",
+					"polytech",
+					3L,
+					new Date()
+			);
+
+			accountService.createNewUser(student2);
 			// teacher account
 			AppUserDto teacher = new TeacherDto();
 			teacher.setFirstname("teacher1Firstname");
