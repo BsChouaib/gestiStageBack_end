@@ -56,31 +56,37 @@ public class DemandServiceImpl implements DemandService {
         {
             throw new ApiRequestException("Subject dose not exist in DB!!!");
         }
+        Files resume = null;
         //
-        String resumeName = StringUtils.cleanPath(cv.getOriginalFilename());
+        if(cv!=null)
+        {
+            String resumeName = StringUtils.cleanPath(cv.getOriginalFilename());
             if (resumeName.contains("..")) {
                 throw new ApiRequestException("resumeName contains invalid path sequence "
                         + resumeName);
             }
-            Files resume = Files.builder()
+            resume = Files.builder()
                     .fileType(cv.getContentType())
                     .fileName(resumeName)
                     .data(cv.getBytes())
                     .build();
             filesRepository.save(resume);
-            //
+        }
+        Files letter = null;
+        if(motivationLetter!=null)
+        {
             String letterName = StringUtils.cleanPath(motivationLetter.getOriginalFilename());
-                if (letterName.contains("..")) {
-                    throw new ApiRequestException("letterName contains invalid path sequence "
-                            + letterName);
-                }
-                Files letter = Files.builder()
-                        .fileType(motivationLetter.getContentType())
-                        .fileName(letterName)
-                        .data(motivationLetter.getBytes())
-                        .build();
-                filesRepository.save(letter);
-                //
+            if (letterName.contains("..")) {
+                throw new ApiRequestException("letterName contains invalid path sequence "
+                        + letterName);
+            }
+            letter = Files.builder()
+                    .fileType(motivationLetter.getContentType())
+                    .fileName(letterName)
+                    .data(motivationLetter.getBytes())
+                    .build();
+            filesRepository.save(letter);
+        }
                 demandRepository.save(Demand.builder()
                         .demandeDate(new Date())
                         .status(Status.Pending)

@@ -159,12 +159,7 @@ public class GestiStageApplication {
 			accountService.createNewUser(teacher);
 			accountService.createNewUser(teacher1);
 			accountService.createNewUser(teacher2);
-            /*
-			accountService.addRoleToUser("user1","USER");
-			accountService.addRoleToUser("user2","USER");
-			accountService.addRoleToUser("admin","USER");
-			accountService.addRoleToUser("admin","ADMIN");
-			*/
+       		//
 			ClaimDtoRequest  claim1 = new ClaimDtoRequest("studentCalim1");
 			ClaimDtoRequest  claim2 = new ClaimDtoRequest("studentCalim1");
 			ClaimDtoRequest  claim3 = new ClaimDtoRequest("studentCalim1");
@@ -195,6 +190,7 @@ public class GestiStageApplication {
 			claimsService.createClaim(claim13,"teacher2@pi.tn");
 
 
+			// demandService.createDemand(1L,"student@pi.tn", null, null);
 			// create demands
             /*demandService.createDemand(1L,"student@pi.tn", null, null);
 			demandService.createDemand(5L,"student1@pi.tn", null, null);

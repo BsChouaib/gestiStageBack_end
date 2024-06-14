@@ -45,6 +45,7 @@ public class Demand {
         this.status = status;
         this.subject = subject;
         this.student = student;
+
     }
 
     public long getDemandId() {
@@ -102,4 +103,5 @@ public class Demand {
     public void setStudent(AppUser student) {
         this.student = student;
     }
+
 }

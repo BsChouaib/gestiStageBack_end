@@ -1,22 +1,9 @@
 package com.MCBS.GestiStage.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.time.LocalDateTime;
-import java.util.Date;
 
-@Entity
-@Builder
 public class Message {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long messageId;
     private String sender;
     private String receiver;
