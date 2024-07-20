@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,7 @@ public class PresentationController {
         this.presentationService = presentationService;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create/{notificationId}")
     //@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     @ApiOperation("Create presentation authorized by admin")
     @ApiImplicitParams({
@@ -43,9 +44,9 @@ public class PresentationController {
                     dataType = "string",
                     paramType = "header")
     })
-    public ResponseEntity<HttpResponse> createPresentation(@RequestBody PresentationDtoRequest presentationDtoRequest)
+    public ResponseEntity<HttpResponse> createPresentation(@PathVariable Long notificationId, @RequestBody PresentationDtoRequest presentationDtoRequest)
     {
-        presentationService.createPresentation(presentationDtoRequest);
+        presentationService.createPresentation(notificationId,presentationDtoRequest);
 
         return ResponseEntity.ok().body(
                 HttpResponse.builder()

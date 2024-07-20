@@ -11,7 +11,7 @@ public interface PresentationService {
     List<PresentationDtoResponse> getAllPresentations();
     PresentationDtoResponse getPresentationById(Long id);
 
-    void createPresentation( PresentationDtoRequest presentationDtoRequest);
+    void createPresentation(Long notificationId, PresentationDtoRequest presentationDtoRequest);
     void updatePresentation(PresentationDtoRequest presentationDtoRequest, Long id);
     void deletePresentation(Long id);
 }

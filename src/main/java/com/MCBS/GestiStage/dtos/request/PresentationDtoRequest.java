@@ -7,18 +7,16 @@ public class PresentationDtoRequest {
     private Date presentationStartTime;
     private Date presentationEndTime;
     private String location;
-    private Long demandId;
     private boolean external;
 
     public PresentationDtoRequest() {
     }
 
-    public PresentationDtoRequest(Date presentationDate, Date presentationStartTime, Date presentationEndTime, String location, Long demandId, boolean external) {
+    public PresentationDtoRequest(Date presentationDate, Date presentationStartTime, Date presentationEndTime, String location, boolean external) {
         this.presentationDate = presentationDate;
         this.presentationStartTime = presentationStartTime;
         this.presentationEndTime = presentationEndTime;
         this.location = location;
-        this.demandId = demandId;
         this.external = external;
     }
 
@@ -36,10 +34,6 @@ public class PresentationDtoRequest {
 
     public String getLocation() {
         return location;
-    }
-
-    public Long getDemandId() {
-        return demandId;
     }
 
     public boolean isExternal() {
@@ -60,10 +54,6 @@ public class PresentationDtoRequest {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public void setDemandId(Long demandId) {
-        this.demandId = demandId;
     }
 
     public void setExternal(boolean external) {

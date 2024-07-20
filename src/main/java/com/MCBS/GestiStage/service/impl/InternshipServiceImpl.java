@@ -9,6 +9,7 @@ import com.MCBS.GestiStage.models.*;
 import com.MCBS.GestiStage.repository.AppUserRepository;
 import com.MCBS.GestiStage.repository.FilesRepository;
 import com.MCBS.GestiStage.repository.InternshipRepository;
+import com.MCBS.GestiStage.repository.NotificationRepository;
 import com.MCBS.GestiStage.service.InternshipService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -31,11 +32,13 @@ public class InternshipServiceImpl implements InternshipService
     private final AppUserRepository appUserRepository;
     private final InternshipDtoConverter internshipDtoConverter;
 
-    public InternshipServiceImpl(InternshipRepository internshipRepository, FilesRepository filesRepository, AppUserRepository appUserRepository, InternshipDtoConverter internshipDtoConverter) {
+    private final NotificationRepository notificationRepository;
+    public InternshipServiceImpl(InternshipRepository internshipRepository, FilesRepository filesRepository, AppUserRepository appUserRepository, InternshipDtoConverter internshipDtoConverter, NotificationRepository notificationRepository) {
         this.internshipRepository = internshipRepository;
         this.filesRepository = filesRepository;
         this.appUserRepository = appUserRepository;
         this.internshipDtoConverter = internshipDtoConverter;
+        this.notificationRepository = notificationRepository;
     }
 
     @Override
@@ -46,8 +49,8 @@ public class InternshipServiceImpl implements InternshipService
                                  MultipartFile internshipReport,
                                  MultipartFile internshipJournal,
                                  presentationRequest state,
-                                 String email) throws IOException {
-
+                                 String email) throws IOException
+    {
         AppUser user = appUserRepository.findByEmail(email);
         if (user == null) {
             throw new ApiRequestException("User dose not exist in DB!!!");
@@ -128,6 +131,34 @@ public class InternshipServiceImpl implements InternshipService
                     .collect(Collectors.toList());
             return internshipDtoResponseList;
         }
+    }
+
+    @Override
+    public void validationInternship(Long id, presentationRequest newState)
+    {
+        Internship internship = internshipRepository.findInternshipByInternshipId(id);
+        if (internship == null)
+        {
+            throw new ApiRequestException("Internship dose not exist in DB!!!");
+        }
+        internship.setState(newState);
+        if(newState.equals(presentationRequest.Done))
+        {
+            String title = internship.getTitre();
+            Long internshipId = internship.getInternshipId();
+            String studentName = internship.getStudent().getFirstname();
+            String teacherName = internship.getTeacher().getFirstname();
+            notificationRepository.save( Notification.builder()
+                    .InternshipId(internshipId)
+                    .Title(title)
+                    .TeacherName(teacherName)
+                    .StudentName(studentName)
+                    .build());
+        }
+
+
+
+
     }
 
 }

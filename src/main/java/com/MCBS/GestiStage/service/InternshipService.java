@@ -2,6 +2,7 @@ package com.MCBS.GestiStage.service;
 
 
 import com.MCBS.GestiStage.dtos.response.InternshipDtoResponse;
+import com.MCBS.GestiStage.enumerations.Status;
 import com.MCBS.GestiStage.enumerations.presentationRequest;
 import com.MCBS.GestiStage.models.Files;
 import com.MCBS.GestiStage.models.Internship;
@@ -25,6 +26,7 @@ public interface InternshipService {
 
     // get All
     List<InternshipDtoResponse> getAllInternship(String userEmail);
-    // get by id
+
+    void validationInternship(Long id, presentationRequest newState);
 
 }

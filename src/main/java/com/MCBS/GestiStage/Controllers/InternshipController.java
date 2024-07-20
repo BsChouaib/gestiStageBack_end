@@ -4,6 +4,7 @@ import com.MCBS.GestiStage.dtos.response.ApiDtoResponse;
 import com.MCBS.GestiStage.dtos.response.HttpResponse;
 import com.MCBS.GestiStage.dtos.response.InternshipDtoResponse;
 import com.MCBS.GestiStage.dtos.response.SubjectDtoResponse;
+import com.MCBS.GestiStage.enumerations.Status;
 import com.MCBS.GestiStage.enumerations.presentationRequest;
 import com.MCBS.GestiStage.exceptions.ApiRequestException;
 import com.MCBS.GestiStage.models.*;
@@ -111,5 +112,30 @@ public class InternshipController {
                 subjects);
         return ResponseEntity.ok(apiDtoResponse);
     }
+
+
+    @PutMapping("/{id}/status")
+    @PreAuthorize("hasAuthority('SCOPE_TEACHER') or hasAuthority('SCOPE_ADMIN')")
+    @ApiOperation("Update status of a demand Internship authorized by (teacher or admin)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<HttpResponse> approveDemand(@PathVariable Long id, @RequestParam presentationRequest newState)
+    {
+
+        internshipService.validationInternship(id, newState);
+        return ResponseEntity.ok().body(
+                HttpResponse.builder()
+                        .timeStamp(new Date().toString())
+                        .message("Demand "+ newState)
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build());
+    }
+
 
 }
