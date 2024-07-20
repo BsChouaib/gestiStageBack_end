@@ -1,7 +1,12 @@
 package com.MCBS.GestiStage.Controllers;
 
+import com.MCBS.GestiStage.dtos.response.ApiDtoResponse;
 import com.MCBS.GestiStage.dtos.response.HttpResponse;
+import com.MCBS.GestiStage.dtos.response.InternshipDtoResponse;
+import com.MCBS.GestiStage.dtos.response.SubjectDtoResponse;
 import com.MCBS.GestiStage.enumerations.presentationRequest;
+import com.MCBS.GestiStage.exceptions.ApiRequestException;
+import com.MCBS.GestiStage.models.*;
 import com.MCBS.GestiStage.service.InternshipService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -12,14 +17,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
@@ -88,6 +92,24 @@ public class InternshipController {
                             .build());
 
         }
+    }
+
+    @GetMapping("/all")
+    @ApiOperation("get Internship by id authorized by All users")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<ApiDtoResponse> getAllInternship() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        List<InternshipDtoResponse> subjects = internshipService.getAllInternship(userEmail);
+        ApiDtoResponse apiDtoResponse = new ApiDtoResponse("success",
+                subjects);
+        return ResponseEntity.ok(apiDtoResponse);
     }
 
 }

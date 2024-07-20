@@ -1,11 +1,11 @@
 package com.MCBS.GestiStage.service.impl;
 
+import com.MCBS.GestiStage.converter.InternshipDtoConverter;
+import com.MCBS.GestiStage.dtos.response.InternshipDtoResponse;
+import com.MCBS.GestiStage.dtos.response.SubjectDtoResponse;
 import com.MCBS.GestiStage.enumerations.presentationRequest;
 import com.MCBS.GestiStage.exceptions.ApiRequestException;
-import com.MCBS.GestiStage.models.Admin;
-import com.MCBS.GestiStage.models.AppUser;
-import com.MCBS.GestiStage.models.Files;
-import com.MCBS.GestiStage.models.Internship;
+import com.MCBS.GestiStage.models.*;
 import com.MCBS.GestiStage.repository.AppUserRepository;
 import com.MCBS.GestiStage.repository.FilesRepository;
 import com.MCBS.GestiStage.repository.InternshipRepository;
@@ -17,19 +17,25 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
-public class InternshipServiceImpl implements InternshipService {
+public class InternshipServiceImpl implements InternshipService
+{
 
     private final InternshipRepository internshipRepository;
     private final FilesRepository filesRepository;
 
     private final AppUserRepository appUserRepository;
+    private final InternshipDtoConverter internshipDtoConverter;
 
-    public InternshipServiceImpl(InternshipRepository internshipRepository, FilesRepository filesRepository, AppUserRepository appUserRepository) {
+    public InternshipServiceImpl(InternshipRepository internshipRepository, FilesRepository filesRepository, AppUserRepository appUserRepository, InternshipDtoConverter internshipDtoConverter) {
         this.internshipRepository = internshipRepository;
         this.filesRepository = filesRepository;
         this.appUserRepository = appUserRepository;
+        this.internshipDtoConverter = internshipDtoConverter;
     }
 
     @Override
@@ -43,33 +49,26 @@ public class InternshipServiceImpl implements InternshipService {
                                  String email) throws IOException {
 
         AppUser user = appUserRepository.findByEmail(email);
-        if (user == null)
-        {
+        if (user == null) {
             throw new ApiRequestException("User dose not exist in DB!!!");
         }
         Internship internship = internshipRepository.findInternshipByInternshipId(id);
-        if(user instanceof Admin)
-        {
-            if(dateDebut!=null)
-            {
+        if (user instanceof Admin) {
+            if (dateDebut != null) {
                 internship.setDateDebut(dateDebut);
             }
-            if(dateFin!=null)
-            {
+            if (dateFin != null) {
                 internship.setDateFin(dateFin);
             }
-            if(titre!=null)
-            {
+            if (titre != null) {
                 internship.setTitre(titre);
             }
-            if(internshipReport!=null)
-            {
+            if (internshipReport != null) {
                 Files file = filesRepository.findFileById(internship.getInternshipReport().getId());
                 String internshipReportName = StringUtils.cleanPath(internshipReport.getOriginalFilename());
-                if (internshipReportName.contains(".."))
-                {
+                if (internshipReportName.contains("..")) {
                     throw new ApiRequestException("resumeName contains invalid path sequence "
-                                + internshipReportName);
+                            + internshipReportName);
                 }
                 file.setFileName(internshipReportName);
                 file.setFileType(internshipReport.getContentType());
@@ -77,12 +76,10 @@ public class InternshipServiceImpl implements InternshipService {
                 internship.setInternshipReport(file);
                 filesRepository.save(file);
             }
-            if(internshipJournal!=null)
-            {
+            if (internshipJournal != null) {
                 Files file = filesRepository.findFileById(internship.getInternshipJournal().getId());
                 String internshipJournalName = StringUtils.cleanPath(internshipJournal.getOriginalFilename());
-                if (internshipJournalName.contains(".."))
-                {
+                if (internshipJournalName.contains("..")) {
                     throw new ApiRequestException("resumeName contains invalid path sequence "
                             + internshipJournalName);
                 }
@@ -92,15 +89,45 @@ public class InternshipServiceImpl implements InternshipService {
                 internship.setInternshipJournal(file);
                 filesRepository.save(file);
             }
-            if(state!=null)
-            {
+            if (state != null) {
                 internship.setState(state);
             }
-        }
-        else
-        {
+        } else {
             internship.setState(state);
         }
         internshipRepository.save(internship);
     }
+
+    @Override
+    public List<InternshipDtoResponse> getAllInternship(String userEmail) {
+        AppUser user = appUserRepository.findByEmail(userEmail);
+        if (user == null) {
+            throw new ApiRequestException("User dose not exist in DB!!!");
+        }
+        if (user instanceof Admin) {
+            List<Internship> internships = internshipRepository.findAll();
+            List<InternshipDtoResponse> internshipDtoResponseList = internships.stream()
+                    .map(subject -> internshipDtoConverter.convertToDto(subject))
+                    .collect(Collectors.toList());
+            return internshipDtoResponseList;
+        }
+        else if (user instanceof Student)
+        {
+            List<Internship> internships = internshipRepository.findInternshipByStudent(user);
+            System.out.println(internships.toString());
+            List<InternshipDtoResponse> internshipDtoResponseList = internships.stream()
+                    .map(subject -> internshipDtoConverter.convertToDto(subject))
+                    .collect(Collectors.toList());
+            return internshipDtoResponseList;
+        }
+        else
+        {
+            List<Internship> internships = internshipRepository.findInternshipByTeacher(user);
+            List<InternshipDtoResponse> internshipDtoResponseList = internships.stream()
+                    .map(subject -> internshipDtoConverter.convertToDto(subject))
+                    .collect(Collectors.toList());
+            return internshipDtoResponseList;
+        }
+    }
+
 }
