@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDateTime;
 
-@Controller
-@Api(tags = "Message end points", description = "The message service")
-@RequestMapping("/api/message")
+//@Controller
+//@Api(tags = "Message end points", description = "The message service")
+//@RequestMapping("/api/message")
 public class MessageController {
 
     @MessageMapping("/send")

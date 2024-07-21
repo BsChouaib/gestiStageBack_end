@@ -1,8 +1,6 @@
 package com.MCBS.GestiStage.Controllers;
 
-import com.MCBS.GestiStage.dtos.request.LoginRequest;
 import com.MCBS.GestiStage.dtos.request.PresentationDtoRequest;
-import com.MCBS.GestiStage.dtos.response.ApiDtoResponse;
 import com.MCBS.GestiStage.dtos.response.HttpResponse;
 import com.MCBS.GestiStage.service.PresentationService;
 import io.swagger.annotations.Api;
@@ -35,7 +33,7 @@ public class PresentationController {
     }
 
     @PostMapping("/create/{notificationId}")
-    //@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     @ApiOperation("Create presentation authorized by admin")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
