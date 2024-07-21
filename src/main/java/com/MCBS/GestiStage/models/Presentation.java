@@ -21,11 +21,13 @@ public class Presentation {
     private String location;
     private String presentationTitle;
     private boolean external;
+    private Long teacherId;
+    private Long studentId;
 
     public Presentation() {
     }
 
-    public Presentation(long presentationId, Date presentationDate, Date presentationStartTime, Date presentationEndTime, String location, String presentationTitle, boolean external) {
+    public Presentation(long presentationId, Date presentationDate, Date presentationStartTime, Date presentationEndTime, String location, String presentationTitle, boolean external, Long teacherId, Long studentId) {
         this.presentationId = presentationId;
         this.presentationDate = presentationDate;
         this.presentationStartTime = presentationStartTime;
@@ -33,6 +35,8 @@ public class Presentation {
         this.location = location;
         this.presentationTitle = presentationTitle;
         this.external = external;
+        this.teacherId = teacherId;
+        this.studentId = studentId;
     }
 
     public long getPresentationId() {
@@ -63,6 +67,14 @@ public class Presentation {
         return external;
     }
 
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
     public void setPresentationId(long presentationId) {
         this.presentationId = presentationId;
     }
@@ -89,5 +101,13 @@ public class Presentation {
 
     public void setExternal(boolean external) {
         this.external = external;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 }

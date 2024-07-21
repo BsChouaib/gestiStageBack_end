@@ -17,16 +17,20 @@ public class Notification {
     private String Title;
     private String StudentName;
     private String TeacherName;
+    private Long teacherId;
+    private Long studentId;
 
     public Notification() {
     }
 
-    public Notification(Long id, Long internshipId, String title, String studentName, String teacherName) {
+    public Notification(Long id, Long internshipId, String title, String studentName, String teacherName, Long teacherId, Long studentId) {
         this.id = id;
         InternshipId = internshipId;
         Title = title;
         StudentName = studentName;
         TeacherName = teacherName;
+        this.teacherId = teacherId;
+        this.studentId = studentId;
     }
 
     public Long getId() {
@@ -49,6 +53,14 @@ public class Notification {
         return TeacherName;
     }
 
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -67,5 +79,13 @@ public class Notification {
 
     public void setTeacherName(String teacherName) {
         TeacherName = teacherName;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 }

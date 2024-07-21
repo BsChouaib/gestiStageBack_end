@@ -47,24 +47,22 @@ public class PresentationServiceImpl implements PresentationService {
                     .collect(Collectors.toList());
             return presentationDtoResponses;
         }
-//        else if (user instanceof Student)
-//        {
-//            List<Internship> internships = internshipRepository.findInternshipByStudent(user);
-//            System.out.println(internships.toString());
-//            List<InternshipDtoResponse> internshipDtoResponseList = internships.stream()
-//                    .map(subject -> internshipDtoConverter.convertToDto(subject))
-//                    .collect(Collectors.toList());
-//            return internshipDtoResponseList;
-//        }
-//        else
-//        {
-//            List<Internship> internships = internshipRepository.findInternshipByTeacher(user);
-//            List<InternshipDtoResponse> internshipDtoResponseList = internships.stream()
-//                    .map(subject -> internshipDtoConverter.convertToDto(subject))
-//                    .collect(Collectors.toList());
-//            return internshipDtoResponseList;
-//        }
-        return null;
+        else if (user instanceof Student)
+        {
+            List<Presentation> presentations = presentationRepository.findPresentationByStudentId(user.getId());
+            List<PresentationDtoResponse> presentationDtoResponses = presentations.stream()
+                    .map(presentation -> presentationDtoConverter.convertToDto(presentation))
+                    .collect(Collectors.toList());
+            return presentationDtoResponses;
+        }
+        else
+        {
+          List<Presentation> presentations = presentationRepository.findPresentationByTeacherId(user.getId());
+            List<PresentationDtoResponse> presentationDtoResponses = presentations.stream()
+                    .map(presentation -> presentationDtoConverter.convertToDto(presentation))
+                    .collect(Collectors.toList());
+            return presentationDtoResponses;
+        }
     }
 
     @Override
@@ -91,6 +89,8 @@ public class PresentationServiceImpl implements PresentationService {
             }
             Presentation presentation = presentationDtoConverter.convertDtoToPresentation(presentationDtoRequest);
             presentation.setPresentationTitle(notification.getTitle());
+            presentation.setStudentId(notification.getStudentId());
+            presentation.setTeacherId(presentation.getTeacherId());
             presentationRepository.save(presentation);
             notificationRepository.delete(notification);
         }

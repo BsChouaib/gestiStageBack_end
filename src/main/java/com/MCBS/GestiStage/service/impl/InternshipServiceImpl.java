@@ -153,6 +153,8 @@ public class InternshipServiceImpl implements InternshipService
                     .Title(title)
                     .TeacherName(teacherName)
                     .StudentName(studentName)
+                            .teacherId(internship.getTeacher().getId())
+                            .studentId(internship.getStudent().getId())
                     .build());
         }
 
