@@ -25,5 +25,6 @@ public interface InternshipService {
     List<InternshipDtoResponse> getAllInternship(String userEmail);
 
     void validationInternship(Long id, presentationRequest newState);
+    void deleteInternship(Long id);
 
 }

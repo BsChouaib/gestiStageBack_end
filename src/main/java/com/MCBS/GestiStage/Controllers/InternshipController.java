@@ -124,7 +124,7 @@ public class InternshipController {
                     dataType = "string",
                     paramType = "header")
     })
-    public ResponseEntity<HttpResponse> approveDemand(@PathVariable Long id, @RequestParam presentationRequest newState)
+    public ResponseEntity<HttpResponse> validateInternship(@PathVariable Long id, @RequestParam presentationRequest newState)
     {
 
         internshipService.validationInternship(id, newState);
@@ -137,5 +137,21 @@ public class InternshipController {
                         .build());
     }
 
-
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN') ")
+    @ApiOperation("Delete internship authorized by admin")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<ApiDtoResponse> deleteInternship(@PathVariable Long id)
+    {
+        internshipService.deleteInternship(id);
+        ApiDtoResponse apiDtoResponse = new ApiDtoResponse("Internship deleted successfully!!",
+                null);
+        return ResponseEntity.ok(apiDtoResponse);
+    }
 }

@@ -2,10 +2,11 @@ package com.MCBS.GestiStage.service.impl;
 
 import com.MCBS.GestiStage.converter.PresentationDtoConverter;
 import com.MCBS.GestiStage.dtos.request.PresentationDtoRequest;
+import com.MCBS.GestiStage.dtos.response.InternshipDtoResponse;
 import com.MCBS.GestiStage.dtos.response.PresentationDtoResponse;
 import com.MCBS.GestiStage.exceptions.ApiRequestException;
-import com.MCBS.GestiStage.models.Notification;
-import com.MCBS.GestiStage.models.Presentation;
+import com.MCBS.GestiStage.models.*;
+import com.MCBS.GestiStage.repository.AppUserRepository;
 import com.MCBS.GestiStage.repository.NotificationRepository;
 import com.MCBS.GestiStage.repository.PresentationRepository;
 import com.MCBS.GestiStage.service.PresentationService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -21,21 +23,59 @@ public class PresentationServiceImpl implements PresentationService {
     private final PresentationRepository presentationRepository;
     private  final PresentationDtoConverter presentationDtoConverter;
     private final NotificationRepository notificationRepository;
+    private final AppUserRepository appUserRepository;
 
-    public PresentationServiceImpl(PresentationRepository presentationRepository, PresentationDtoConverter presentationDtoConverter, NotificationRepository notificationRepository) {
+    public PresentationServiceImpl(PresentationRepository presentationRepository, PresentationDtoConverter presentationDtoConverter, NotificationRepository notificationRepository, AppUserRepository appUserRepository) {
         this.presentationRepository = presentationRepository;
         this.presentationDtoConverter = presentationDtoConverter;
         this.notificationRepository = notificationRepository;
+        this.appUserRepository = appUserRepository;
     }
 
     @Override
-    public List<PresentationDtoResponse> getAllPresentations() {
+    public List<PresentationDtoResponse> getAllPresentations(String userEmail)
+    {
+        AppUser user = appUserRepository.findByEmail(userEmail);
+        if (user == null) {
+            throw new ApiRequestException("User dose not exist in DB!!!");
+        }
+        if (user instanceof Admin)
+        {
+            List<Presentation> presentations = presentationRepository.findAll();
+            List<PresentationDtoResponse> presentationDtoResponses = presentations.stream()
+                    .map(presentation -> presentationDtoConverter.convertToDto(presentation))
+                    .collect(Collectors.toList());
+            return presentationDtoResponses;
+        }
+//        else if (user instanceof Student)
+//        {
+//            List<Internship> internships = internshipRepository.findInternshipByStudent(user);
+//            System.out.println(internships.toString());
+//            List<InternshipDtoResponse> internshipDtoResponseList = internships.stream()
+//                    .map(subject -> internshipDtoConverter.convertToDto(subject))
+//                    .collect(Collectors.toList());
+//            return internshipDtoResponseList;
+//        }
+//        else
+//        {
+//            List<Internship> internships = internshipRepository.findInternshipByTeacher(user);
+//            List<InternshipDtoResponse> internshipDtoResponseList = internships.stream()
+//                    .map(subject -> internshipDtoConverter.convertToDto(subject))
+//                    .collect(Collectors.toList());
+//            return internshipDtoResponseList;
+//        }
         return null;
     }
 
     @Override
     public PresentationDtoResponse getPresentationById(Long id) {
-        return null;
+        Presentation presentation = presentationRepository.findPresentationByPresentationId(id);
+        if (presentation == null)
+        {
+            throw new ApiRequestException("Presentation dose not exist in DB!!!");
+        }
+        PresentationDtoResponse presentationDtoResponse = presentationDtoConverter.convertToDto(presentation);
+        return presentationDtoResponse;
     }
 
     @Override
@@ -65,11 +105,54 @@ public class PresentationServiceImpl implements PresentationService {
 
     @Override
     public void updatePresentation(PresentationDtoRequest presentationDtoRequest, Long id) {
+        Presentation presentation = presentationRepository.findPresentationByPresentationId(id);
+        if (presentation == null)
+        {
+            throw new ApiRequestException("Presentation dose not exist in DB!!!");
+        }
+        Presentation newPresentation = presentationDtoConverter.convertDtoToPresentation(presentationDtoRequest);
+
+        //title
+        if(newPresentation.getPresentationTitle()!=null)
+        {
+            presentation.setPresentationTitle(newPresentation.getPresentationTitle());
+        }
+        //presentationDate
+        if(newPresentation.getPresentationDate()!=null)
+        {
+            presentation.setPresentationDate(newPresentation.getPresentationDate());
+        }
+        //presentationStartTime
+        if(newPresentation.getPresentationStartTime()!=null)
+        {
+            presentation.setPresentationStartTime(newPresentation.getPresentationStartTime());
+        }
+        //presentationEndTime
+        if(newPresentation.getPresentationEndTime()!=null)
+        {
+            presentation.setPresentationEndTime(newPresentation.getPresentationEndTime());
+        }
+        //location
+        if(newPresentation.getLocation()!=null)
+        {
+            presentation.setLocation(newPresentation.getLocation());
+        }
+        //External
+        if(newPresentation.isExternal())
+        {
+            presentation.setExternal(newPresentation.isExternal());
+        }
+        presentationRepository.save(presentation);
 
     }
 
     @Override
     public void deletePresentation(Long id) {
-
+        Presentation presentation = presentationRepository.findPresentationByPresentationId(id);
+        if (presentation == null)
+        {
+            throw new ApiRequestException("Presentation dose not exist in DB!!!");
+        }
+        presentationRepository.delete(presentation);
     }
 }

@@ -8,7 +8,7 @@ import com.MCBS.GestiStage.dtos.response.StudentDtoResponse;
 import java.util.List;
 
 public interface PresentationService {
-    List<PresentationDtoResponse> getAllPresentations();
+    List<PresentationDtoResponse> getAllPresentations(String userEmail);
     PresentationDtoResponse getPresentationById(Long id);
 
     void createPresentation(Long notificationId, PresentationDtoRequest presentationDtoRequest);

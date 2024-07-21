@@ -7,16 +7,19 @@ public class PresentationDtoRequest {
     private Date presentationStartTime;
     private Date presentationEndTime;
     private String location;
+    private String presentationTitle;
+
     private boolean external;
 
     public PresentationDtoRequest() {
     }
 
-    public PresentationDtoRequest(Date presentationDate, Date presentationStartTime, Date presentationEndTime, String location, boolean external) {
+    public PresentationDtoRequest(Date presentationDate, Date presentationStartTime, Date presentationEndTime, String location, String presentationTitle, boolean external) {
         this.presentationDate = presentationDate;
         this.presentationStartTime = presentationStartTime;
         this.presentationEndTime = presentationEndTime;
         this.location = location;
+        this.presentationTitle = presentationTitle;
         this.external = external;
     }
 
@@ -34,6 +37,10 @@ public class PresentationDtoRequest {
 
     public String getLocation() {
         return location;
+    }
+
+    public String getPresentationTitle() {
+        return presentationTitle;
     }
 
     public boolean isExternal() {
@@ -54,6 +61,10 @@ public class PresentationDtoRequest {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public void setPresentationTitle(String presentationTitle) {
+        this.presentationTitle = presentationTitle;
     }
 
     public void setExternal(boolean external) {

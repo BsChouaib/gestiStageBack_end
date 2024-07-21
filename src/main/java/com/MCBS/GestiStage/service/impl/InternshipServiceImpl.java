@@ -161,4 +161,14 @@ public class InternshipServiceImpl implements InternshipService
 
     }
 
+    @Override
+    public void deleteInternship(Long id) {
+        Internship internship = internshipRepository.findInternshipByInternshipId(id);
+        if(internship==null)
+        {
+            throw new ApiRequestException("Internship dose not exist in DB!!!");
+        }
+        internshipRepository.delete(internship);
+    }
+
 }
