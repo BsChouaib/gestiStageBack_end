@@ -1,13 +1,7 @@
 package com.MCBS.GestiStage.Controllers;
 
-import com.MCBS.GestiStage.dtos.response.ApiDtoResponse;
-import com.MCBS.GestiStage.dtos.response.HttpResponse;
-import com.MCBS.GestiStage.dtos.response.InternshipDtoResponse;
-import com.MCBS.GestiStage.dtos.response.SubjectDtoResponse;
-import com.MCBS.GestiStage.enumerations.Status;
+import com.MCBS.GestiStage.dtos.response.*;
 import com.MCBS.GestiStage.enumerations.presentationRequest;
-import com.MCBS.GestiStage.exceptions.ApiRequestException;
-import com.MCBS.GestiStage.models.*;
 import com.MCBS.GestiStage.service.InternshipService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -24,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
@@ -43,7 +37,7 @@ public class InternshipController {
     // modification data ect
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_TEACHER') or hasAuthority('SCOPE_ADMIN')")
-    @ApiOperation("Internship Demand authorized by (teacher or admin)")
+    @ApiOperation("Update internship authorized by (teacher or admin)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
                     value = "Bearer access token",
@@ -96,7 +90,7 @@ public class InternshipController {
     }
 
     @GetMapping("/all")
-    @ApiOperation("get Internship by id authorized by All users")
+    @ApiOperation("Get all internship by id authorized by All users")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
                     value = "Bearer access token",
@@ -116,7 +110,7 @@ public class InternshipController {
 
     @PutMapping("/{id}/status")
     @PreAuthorize("hasAuthority('SCOPE_TEACHER') or hasAuthority('SCOPE_ADMIN')")
-    @ApiOperation("Update status of a demand Internship authorized by (teacher or admin)")
+    @ApiOperation("Validate internship authorized by (teacher or admin)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
                     value = "Bearer access token",
@@ -131,7 +125,7 @@ public class InternshipController {
         return ResponseEntity.ok().body(
                 HttpResponse.builder()
                         .timeStamp(new Date().toString())
-                        .message("Demand "+ newState)
+                        .message("Internship "+ newState)
                         .status(OK)
                         .statusCode(OK.value())
                         .build());
@@ -153,5 +147,29 @@ public class InternshipController {
         ApiDtoResponse apiDtoResponse = new ApiDtoResponse("Internship deleted successfully!!",
                 null);
         return ResponseEntity.ok(apiDtoResponse);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_TEACHER') or hasAuthority('SCOPE_ADMIN')")
+    @ApiOperation("Get internship by id")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<HttpResponse> getInternshipById(@PathVariable Long id) {
+
+        InternshipDtoResponse internshipDtoResponse = internshipService.getInternshipById(id);
+        return ResponseEntity.ok().body(
+                HttpResponse.builder()
+                        .timeStamp(new Date().toString())
+                        .data(Map.of("internship",internshipDtoResponse))
+                        .message("Internship retried")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
     }
 }

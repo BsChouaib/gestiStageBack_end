@@ -27,4 +27,6 @@ public interface InternshipService {
     void validationInternship(Long id, presentationRequest newState);
     void deleteInternship(Long id);
 
+    InternshipDtoResponse getInternshipById(Long id);
+
 }
