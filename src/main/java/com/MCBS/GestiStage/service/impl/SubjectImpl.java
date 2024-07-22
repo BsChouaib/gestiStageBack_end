@@ -34,7 +34,7 @@ public class SubjectImpl implements SubjectService {
     }
 
     @Override
-    public void createSubject(SubjectDtoRequest subject) {
+    public void createSubject(SubjectDtoRequest subject, String userEmail) {
         AppUser user = appUserRepository.findByEmail(subject.teacherEmail());
         if (user == null)
         {
@@ -45,19 +45,45 @@ public class SubjectImpl implements SubjectService {
         {
             throw new ApiRequestException("This studyField dose not exist in DB!!!");
         }
-        try
+        AppUser creator = appUserRepository.findByEmail(userEmail);
+        if (creator == null)
         {
-            subjectRepository.save(Subject.builder()
-                .title(subject.title())
-                .description(subject.description())
-                .internshipType(subject.internshipType())
-                    .teacher(user)
-                            .studyField(studyField)
-                .build());
+            throw new ApiRequestException("User dose not exist in DB!!!");
         }
-        catch (Exception e)
+        if(!(creator instanceof Student))
         {
-            throw new ApiRequestException(e.getMessage());
+            try
+            {
+                subjectRepository.save(Subject.builder()
+                        .title(subject.title())
+                        .description(subject.description())
+                        .internshipType(subject.internshipType())
+                        .teacher(user)
+                        .studyField(studyField)
+                        .build());
+            }
+            catch (Exception e)
+            {
+                throw new ApiRequestException(e.getMessage());
+            }
+        }
+        else
+        {
+            try
+            {
+                subjectRepository.save(Subject.builder()
+                        .title(subject.title())
+                        .description(subject.description())
+                        .internshipType(subject.internshipType())
+                        .teacher(user)
+                        .studyField(((Student) creator).getStudyField())
+                        .build());
+            }
+            catch (Exception e)
+            {
+                throw new ApiRequestException(e.getMessage());
+            }
+
         }
 
     }

@@ -32,7 +32,6 @@ public class SubjectController {
 
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     @ApiOperation("Create subject authorized by admin")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
@@ -43,7 +42,9 @@ public class SubjectController {
     })
     public ResponseEntity<ApiDtoResponse> createSubject(@RequestBody SubjectDtoRequest subject)
     {
-        subjectService.createSubject(subject);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        subjectService.createSubject(subject, userEmail);
         ApiDtoResponse apiDtoResponse = new ApiDtoResponse("Subject added successfully!!",
                 null);
         return ResponseEntity.ok(apiDtoResponse);
@@ -114,4 +115,6 @@ public class SubjectController {
                 subjects);
         return ResponseEntity.ok(apiDtoResponse);
     }
+
+
 }

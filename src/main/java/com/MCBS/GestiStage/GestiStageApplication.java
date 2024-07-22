@@ -212,16 +212,17 @@ public class GestiStageApplication {
 			SubjectDtoRequest subjectDtoRequest8= new SubjectDtoRequest("dev retail system","dev web with angular and spring boot framework","teacher@pi.tn", InternshipType.EndOfStudiesProject,4L);
 			SubjectDtoRequest subjectDtoRequest9= new SubjectDtoRequest("dev tracking system","dev web with angular and spring boot framework","teacher@pi.tn", InternshipType.EndOfStudiesProject,3L);
 			SubjectDtoRequest subjectDtoRequest10= new SubjectDtoRequest("dev payment module","dev web with angular and spring boot framework","teacher2@pi.tn", InternshipType.EndOfStudiesProject, 5L);
-			subjectService.createSubject(subjectDtoRequest1);
-			subjectService.createSubject(subjectDtoRequest2);
-			subjectService.createSubject(subjectDtoRequest3);
-			subjectService.createSubject(subjectDtoRequest4);
-			subjectService.createSubject(subjectDtoRequest5);
-			subjectService.createSubject(subjectDtoRequest6);
-			subjectService.createSubject(subjectDtoRequest7);
-			subjectService.createSubject(subjectDtoRequest8);
-			subjectService.createSubject(subjectDtoRequest9);
-			subjectService.createSubject(subjectDtoRequest10);
+			subjectService.createSubject(subjectDtoRequest1, "student@pi.tn");
+			subjectService.createSubject(subjectDtoRequest2, "student2@pi.tn");
+			subjectService.createSubject(subjectDtoRequest3, "admin@pi.tn");
+			subjectService.createSubject(subjectDtoRequest4, "admin@pi.tn");
+			subjectService.createSubject(subjectDtoRequest5, "admin@pi.tn");
+			subjectService.createSubject(subjectDtoRequest6, "admin@pi.tn");
+			subjectService.createSubject(subjectDtoRequest7, "admin@pi.tn");
+			subjectService.createSubject(subjectDtoRequest8, "admin@pi.tn");
+			subjectService.createSubject(subjectDtoRequest9, "admin@pi.tn");
+			subjectService.createSubject(subjectDtoRequest10, "student13@pi.tn");
+
 
 		};
 	}

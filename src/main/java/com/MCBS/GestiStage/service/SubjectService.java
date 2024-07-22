@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SubjectService
 {
-    void createSubject(SubjectDtoRequest subject);
+    void createSubject(SubjectDtoRequest subject, String userEmail);
     void updateSubject(SubjectDtoRequest subject, Long id);
     SubjectDtoResponse getSubjectId(Long id);
     public void deleteSubject(Long id);
