@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
@@ -63,7 +64,7 @@ public class PresentationController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    @ApiOperation("Internship Demand authorized by (teacher or admin)")
+    @ApiOperation("Update presentation authorized by admin")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
                     value = "Bearer access token",
@@ -101,7 +102,7 @@ public class PresentationController {
 
 
     @GetMapping("/all")
-    @ApiOperation("get Presentation by id authorized by All users")
+    @ApiOperation("Get presentation by id authorized by All users")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization",
                     value = "Bearer access token",
@@ -115,6 +116,47 @@ public class PresentationController {
         List<PresentationDtoResponse> presentations = presentationService.getAllPresentations(userEmail);
         ApiDtoResponse apiDtoResponse = new ApiDtoResponse("success",
                 presentations);
+        return ResponseEntity.ok(apiDtoResponse);
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("Get presentation by id")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<HttpResponse> getPresentationById(@PathVariable Long id) {
+
+        PresentationDtoResponse presentationDtoResponse = presentationService.getPresentationById(id);
+        return ResponseEntity.ok().body(
+                HttpResponse.builder()
+                        .timeStamp(new Date().toString())
+                        .data(Map.of("presentation",presentationDtoResponse))
+                        .message("Presentation retried")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN') ")
+    @ApiOperation("Delete presentation authorized by admin")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<ApiDtoResponse> deletePresentation(@PathVariable Long id)
+    {
+        presentationService.deletePresentation(id);
+        ApiDtoResponse apiDtoResponse = new ApiDtoResponse("Presentation deleted successfully!!",
+                null);
         return ResponseEntity.ok(apiDtoResponse);
     }
 }
