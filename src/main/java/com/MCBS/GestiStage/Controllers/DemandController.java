@@ -46,12 +46,12 @@ public class DemandController {
     })
     public ResponseEntity<HttpResponse> createDemand(@RequestParam("subjectId")Long subjectId,
                                                      @RequestParam(value = "resume", required = false)MultipartFile resume,
-                                                     @RequestParam(value = "motivationLetter", required = false)MultipartFile motivationLetter)
+                                                     @RequestParam(value = "coverLetter", required = false)MultipartFile coverLetter)
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
         try{
-            demandService.createDemand(subjectId, userEmail, resume, motivationLetter);
+            demandService.createDemand(subjectId, userEmail, resume, coverLetter);
             return ResponseEntity.ok().body(
                     HttpResponse.builder()
                             .timeStamp(new Date().toString())
@@ -220,14 +220,12 @@ public class DemandController {
     })
     public ResponseEntity<HttpResponse> updateDemand(   @PathVariable Long id,
                                                         @RequestParam(value = "subjectId", required = false)Long subjectId,
-                                                        @RequestParam(value = "email", required = false)String email,
                                                         @RequestParam(value = "resume", required = false)MultipartFile resume,
-                                                        @RequestParam(value = "motivationLetter", required = false)MultipartFile motivationLetter
+                                                        @RequestParam(value = "coverLetter", required = false)MultipartFile motivationLetter
                                                     ) {
         try {
             demandService.updateDemand( id,
                                         subjectId,
-                                        email,
                                         resume,
                                         motivationLetter
                                         );

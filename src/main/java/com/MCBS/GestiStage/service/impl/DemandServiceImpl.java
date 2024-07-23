@@ -237,7 +237,10 @@ public class DemandServiceImpl implements DemandService {
     }
 
     @Override
-    public void updateDemand(Long demandId, Long subjectId, String email, MultipartFile cv, MultipartFile motivationLetter) throws IOException
+    public void updateDemand( Long demandId,
+                              Long subjectId,
+                              MultipartFile cv,
+                              MultipartFile motivationLetter) throws IOException
     {
 
         Demand demand = demandRepository.findDemandByDemandId(demandId);
@@ -254,42 +257,71 @@ public class DemandServiceImpl implements DemandService {
             }
             demand.setSubject(subject);
         }
-        if(email != null)
-        {
-            AppUser user = appUserRepository.findByEmail(email);
-            if (user == null)
-            {
-                throw new ApiRequestException("User dose not exist in DB!!!");
-            }
-            demand.setStudent(user);
-        }
         if(cv != null)
         {
-            Files file = filesRepository.findFileById(demand.getResume().getId());
-            //
-            String resumeName = StringUtils.cleanPath(cv.getOriginalFilename());
-            if (resumeName.contains("..")) {
-                throw new ApiRequestException("resumeName contains invalid path sequence "
-                        + resumeName);
+            if(demand.getResume()!=null)
+            {
+                Files file = filesRepository.findFileById(demand.getResume().getId());
+                //
+                String resumeName = StringUtils.cleanPath(cv.getOriginalFilename());
+                if (resumeName.contains("..")) {
+                    throw new ApiRequestException("resumeName contains invalid path sequence "
+                            + resumeName);
+                }
+                file.setFileName(resumeName);
+                file.setFileType(cv.getContentType());
+                file.setData(cv.getBytes());
+                filesRepository.save(file);
             }
-            file.setFileName(resumeName);
-            file.setFileType(cv.getContentType());
-            file.setData(cv.getBytes());
-            filesRepository.save(file);
+            else
+            {
+                String resumeName = StringUtils.cleanPath(cv.getOriginalFilename());
+                if (resumeName.contains("..")) {
+                    throw new ApiRequestException("resumeName contains invalid path sequence "
+                            + resumeName);
+                }
+                Files resume = Files.builder()
+                        .fileType(cv.getContentType())
+                        .fileName(resumeName)
+                        .data(cv.getBytes())
+                        .build();
+                filesRepository.save(resume);
+                demand.setResume(resume);
+            }
         }
         if( motivationLetter != null)
         {
-            Files file = filesRepository.findFileById(demand.getMotivationLetter().getId());
-            //
-            String letterName = StringUtils.cleanPath(motivationLetter.getOriginalFilename());
-            if (letterName.contains("..")) {
-                throw new ApiRequestException("letterName contains invalid path sequence "
-                        + letterName);
+            if(demand.getMotivationLetter()!=null)
+            {
+                Files file = filesRepository.findFileById(demand.getMotivationLetter().getId());
+                //
+                String letterName = StringUtils.cleanPath(motivationLetter.getOriginalFilename());
+                if (letterName.contains("..")) {
+                    throw new ApiRequestException("letterName contains invalid path sequence "
+                            + letterName);
+                }
+                file.setFileName(letterName);
+                file.setFileType(motivationLetter.getContentType());
+                file.setData(motivationLetter.getBytes());
+                filesRepository.save(file);
             }
-            file.setFileName(letterName);
-            file.setFileType(motivationLetter.getContentType());
-            file.setData(motivationLetter.getBytes());
-            filesRepository.save(file);
+            else
+            {
+                String letterName = StringUtils.cleanPath(motivationLetter.getOriginalFilename());
+                if (letterName.contains("..")) {
+                    throw new ApiRequestException("letterName contains invalid path sequence "
+                            + letterName);
+                }
+                Files letter = Files.builder()
+                        .fileType(motivationLetter.getContentType())
+                        .fileName(letterName)
+                        .data(motivationLetter.getBytes())
+                        .build();
+                filesRepository.save(letter);
+               demand.setMotivationLetter(letter);
+            }
+
+
         }
         demandRepository.save(demand);
     }

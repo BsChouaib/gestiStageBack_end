@@ -20,7 +20,7 @@ public interface DemandService
     List<DemandDtoResponse> getDemands(String email);
     void deleteDemand(Long id);
     DemandDtoResponse getDemandById(Long id);
-    void updateDemand(Long demandId, Long subjectId, String email, MultipartFile cv, MultipartFile motivationLetter) throws IOException;
+    void updateDemand(Long demandId, Long subjectId, MultipartFile cv, MultipartFile motivationLetter) throws IOException;
 
 /*
 

@@ -46,9 +46,7 @@ public class InternshipController {
                     dataType = "string",
                     paramType = "header")
     })
-    public ResponseEntity<HttpResponse> updateInternship(
-            @ModelAttribute InternshipDto formData
-                                                        )
+    public ResponseEntity<HttpResponse> updateInternship( @ModelAttribute InternshipDto formData )
     {
         try {
 
