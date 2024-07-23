@@ -47,23 +47,29 @@ public class InternshipController {
                     paramType = "header")
     })
     public ResponseEntity<HttpResponse> updateInternship(
-                                                     @PathVariable Long id,
-                                                     @RequestBody InternshipDto internshipDto,
-                                                     @RequestParam(value = "internshipReport", required = false)MultipartFile internshipReport,
-                                                     @RequestParam(value = "internshipJournal", required = false) MultipartFile internshipJournal
+            @ModelAttribute InternshipDto formData
                                                         )
     {
         try {
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            Long id = formData.getId();
+            LocalDateTime dateDebut = formData.getDateDebut();
+            LocalDateTime dateFin = formData.getDateFin();
+            String titre = formData.getTitre();
+            MultipartFile internshipReport = formData.getInternshipReport();
+            MultipartFile internshipJournal = formData.getInternshipJournal();
+            presentationRequest newState = formData.getNewState();
+
             String userEmail = authentication.getName();
             internshipService.updateInternship( id,
-                    internshipDto.getDateDebut(),
-                    internshipDto.getDateFin(),
-                    internshipDto.getTitre(),
+                    dateDebut,
+                    dateFin,
+                    titre,
                     internshipReport,
                     internshipJournal,
-                    internshipDto.getState(),
+                    newState,
                     userEmail
             );
             return ResponseEntity.ok().body(

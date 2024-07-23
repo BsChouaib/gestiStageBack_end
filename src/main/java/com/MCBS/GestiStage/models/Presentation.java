@@ -29,7 +29,7 @@ public class Presentation {
     public Presentation() {
     }
 
-    public Presentation(long presentationId, Date presentationDate, Date presentationStartTime, Date presentationEndTime, String location, String presentationTitle, boolean external, Long teacherId, Long studentId) {
+    public Presentation(long presentationId, Date presentationDate, Date presentationStartTime, Date presentationEndTime, String location, String presentationTitle, boolean external, Long teacherId, Long studentId, PresentationResult result) {
         this.presentationId = presentationId;
         this.presentationDate = presentationDate;
         this.presentationStartTime = presentationStartTime;
@@ -39,6 +39,7 @@ public class Presentation {
         this.external = external;
         this.teacherId = teacherId;
         this.studentId = studentId;
+        this.result = result;
     }
 
     public long getPresentationId() {
@@ -111,5 +112,13 @@ public class Presentation {
 
     public void setStudentId(Long studentId) {
         this.studentId = studentId;
+    }
+
+    public PresentationResult getResult() {
+        return result;
+    }
+
+    public void setResult(PresentationResult result) {
+        this.result = result;
     }
 }
