@@ -36,7 +36,7 @@ public class InternshipController {
     }
 
     // modification data ect
-    @PutMapping("/{id}")
+    @PutMapping("/update")
     @PreAuthorize("hasAuthority('SCOPE_TEACHER') or hasAuthority('SCOPE_ADMIN')")
     @ApiOperation("Update internship authorized by (teacher or admin)")
     @ApiImplicitParams({
