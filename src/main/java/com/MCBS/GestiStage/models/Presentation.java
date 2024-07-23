@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 @Entity
@@ -21,15 +22,18 @@ public class Presentation {
     private String location;
     private String presentationTitle;
     private boolean external;
-    private Long teacherId;
-    private Long studentId;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private AppUser student;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private AppUser teacher;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private PresentationResult result;
 
     public Presentation() {
     }
 
-    public Presentation(long presentationId, Date presentationDate, Date presentationStartTime, Date presentationEndTime, String location, String presentationTitle, boolean external, Long teacherId, Long studentId, PresentationResult result) {
+    public Presentation(long presentationId, Date presentationDate, Date presentationStartTime, Date presentationEndTime, String location, String presentationTitle, boolean external, AppUser student, AppUser teacher, PresentationResult result) {
         this.presentationId = presentationId;
         this.presentationDate = presentationDate;
         this.presentationStartTime = presentationStartTime;
@@ -37,8 +41,8 @@ public class Presentation {
         this.location = location;
         this.presentationTitle = presentationTitle;
         this.external = external;
-        this.teacherId = teacherId;
-        this.studentId = studentId;
+        this.student = student;
+        this.teacher = teacher;
         this.result = result;
     }
 
@@ -70,12 +74,16 @@ public class Presentation {
         return external;
     }
 
-    public Long getTeacherId() {
-        return teacherId;
+    public AppUser getStudent() {
+        return student;
     }
 
-    public Long getStudentId() {
-        return studentId;
+    public AppUser getTeacher() {
+        return teacher;
+    }
+
+    public PresentationResult getResult() {
+        return result;
     }
 
     public void setPresentationId(long presentationId) {
@@ -106,16 +114,12 @@ public class Presentation {
         this.external = external;
     }
 
-    public void setTeacherId(Long teacherId) {
-        this.teacherId = teacherId;
+    public void setStudent(AppUser student) {
+        this.student = student;
     }
 
-    public void setStudentId(Long studentId) {
-        this.studentId = studentId;
-    }
-
-    public PresentationResult getResult() {
-        return result;
+    public void setTeacher(AppUser teacher) {
+        this.teacher = teacher;
     }
 
     public void setResult(PresentationResult result) {

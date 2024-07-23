@@ -1,7 +1,11 @@
 package com.MCBS.GestiStage.dtos.response;
 
+import com.MCBS.GestiStage.models.AppUser;
 import com.MCBS.GestiStage.models.PresentationResult;
 
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
 import java.util.Date;
 
 public class PresentationDtoResponse {
@@ -11,19 +15,25 @@ public class PresentationDtoResponse {
     private Date presentationEndTime;
     private String location;
     private String presentationTitle;
+
+    private StudentDToRespI student;
+    private TeacherDtoRespI teacher;
     private boolean external;
     private PresentationResult result;
 
     public PresentationDtoResponse() {
     }
 
-    public PresentationDtoResponse(long presentationId, Date presentationDate, Date presentationStartTime, Date presentationEndTime, String location, String presentationTitle, boolean external, PresentationResult result) {
+
+    public PresentationDtoResponse(long presentationId, Date presentationDate, Date presentationStartTime, Date presentationEndTime, String location, String presentationTitle, StudentDToRespI student, TeacherDtoRespI teacher, boolean external, PresentationResult result) {
         this.presentationId = presentationId;
         this.presentationDate = presentationDate;
         this.presentationStartTime = presentationStartTime;
         this.presentationEndTime = presentationEndTime;
         this.location = location;
         this.presentationTitle = presentationTitle;
+        this.student = student;
+        this.teacher = teacher;
         this.external = external;
         this.result = result;
     }
@@ -90,5 +100,21 @@ public class PresentationDtoResponse {
 
     public void setResult(PresentationResult result) {
         this.result = result;
+    }
+
+    public StudentDToRespI getStudent() {
+        return student;
+    }
+
+    public TeacherDtoRespI getTeacher() {
+        return teacher;
+    }
+
+    public void setStudent(StudentDToRespI student) {
+        this.student = student;
+    }
+
+    public void setTeacher(TeacherDtoRespI teacher) {
+        this.teacher = teacher;
     }
 }

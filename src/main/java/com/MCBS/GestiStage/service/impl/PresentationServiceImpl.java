@@ -88,10 +88,18 @@ public class PresentationServiceImpl implements PresentationService {
             {
                 throw new ApiRequestException("Notification dose not exist in DB!!!");
             }
+            AppUser student = appUserRepository.findById(notification.getStudentId());
+            if (student == null) {
+                throw new ApiRequestException("student dose not exist in DB!!!");
+            }
+            AppUser teacher = appUserRepository.findById(notification.getTeacherId());
+            if (teacher == null) {
+                throw new ApiRequestException("teacher dose not exist in DB!!!");
+            }
             Presentation presentation = presentationDtoConverter.convertDtoToPresentation(presentationDtoRequest);
             presentation.setPresentationTitle(notification.getTitle());
-            presentation.setStudentId(notification.getStudentId());
-            presentation.setTeacherId(notification.getTeacherId());
+            presentation.setStudent(student);
+            presentation.setTeacher(teacher);
             PresentationResult result = PresentationResult.builder()
                     .passMark("-")
                     .passMark("-")
