@@ -23,6 +23,8 @@ public class Presentation {
     private boolean external;
     private Long teacherId;
     private Long studentId;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private PresentationResult result;
 
     public Presentation() {
     }
