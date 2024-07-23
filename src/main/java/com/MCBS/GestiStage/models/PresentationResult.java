@@ -1,6 +1,7 @@
 package com.MCBS.GestiStage.models;
 
 import com.MCBS.GestiStage.enumerations.PresentationResultStatus;
+import lombok.Builder;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
+@Builder
 public class PresentationResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,7 @@
 package com.MCBS.GestiStage.dtos.response;
 
+import com.MCBS.GestiStage.models.PresentationResult;
+
 import java.util.Date;
 
 public class PresentationDtoResponse {
@@ -10,11 +12,12 @@ public class PresentationDtoResponse {
     private String location;
     private String presentationTitle;
     private boolean external;
+    private PresentationResult result;
 
     public PresentationDtoResponse() {
     }
 
-    public PresentationDtoResponse(long presentationId, Date presentationDate, Date presentationStartTime, Date presentationEndTime, String location, String presentationTitle, boolean external) {
+    public PresentationDtoResponse(long presentationId, Date presentationDate, Date presentationStartTime, Date presentationEndTime, String location, String presentationTitle, boolean external, PresentationResult result) {
         this.presentationId = presentationId;
         this.presentationDate = presentationDate;
         this.presentationStartTime = presentationStartTime;
@@ -22,6 +25,7 @@ public class PresentationDtoResponse {
         this.location = location;
         this.presentationTitle = presentationTitle;
         this.external = external;
+        this.result = result;
     }
 
     public long getPresentationId() {
@@ -78,5 +82,13 @@ public class PresentationDtoResponse {
 
     public void setExternal(boolean external) {
         this.external = external;
+    }
+
+    public PresentationResult getResult() {
+        return result;
+    }
+
+    public void setResult(PresentationResult result) {
+        this.result = result;
     }
 }

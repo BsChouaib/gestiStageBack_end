@@ -4,6 +4,7 @@ import com.MCBS.GestiStage.converter.PresentationDtoConverter;
 import com.MCBS.GestiStage.dtos.request.PresentationDtoRequest;
 import com.MCBS.GestiStage.dtos.response.InternshipDtoResponse;
 import com.MCBS.GestiStage.dtos.response.PresentationDtoResponse;
+import com.MCBS.GestiStage.enumerations.PresentationResultStatus;
 import com.MCBS.GestiStage.exceptions.ApiRequestException;
 import com.MCBS.GestiStage.models.*;
 import com.MCBS.GestiStage.repository.AppUserRepository;
@@ -90,7 +91,13 @@ public class PresentationServiceImpl implements PresentationService {
             Presentation presentation = presentationDtoConverter.convertDtoToPresentation(presentationDtoRequest);
             presentation.setPresentationTitle(notification.getTitle());
             presentation.setStudentId(notification.getStudentId());
-            presentation.setTeacherId(presentation.getTeacherId());
+            presentation.setTeacherId(notification.getTeacherId());
+            PresentationResult result = PresentationResult.builder()
+                    .passMark("-")
+                    .passMark("-")
+                    .status(PresentationResultStatus.InProgress)
+                    .build();
+            presentation.setResult(result);
             presentationRepository.save(presentation);
             notificationRepository.delete(notification);
         }
