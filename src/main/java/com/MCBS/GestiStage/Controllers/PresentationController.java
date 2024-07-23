@@ -74,7 +74,7 @@ public class PresentationController {
     })
     public ResponseEntity<HttpResponse> updatePresentation(
             @PathVariable Long id,
-            PresentationDtoRequest presentationDtoRequest
+            @RequestBody PresentationDtoRequest presentationDtoRequest
     )
     {
         try {

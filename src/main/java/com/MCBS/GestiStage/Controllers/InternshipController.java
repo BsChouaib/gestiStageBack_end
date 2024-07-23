@@ -1,5 +1,6 @@
 package com.MCBS.GestiStage.Controllers;
 
+import com.MCBS.GestiStage.dtos.request.InternshipDto;
 import com.MCBS.GestiStage.dtos.response.*;
 import com.MCBS.GestiStage.enumerations.presentationRequest;
 import com.MCBS.GestiStage.service.InternshipService;
@@ -47,12 +48,9 @@ public class InternshipController {
     })
     public ResponseEntity<HttpResponse> updateInternship(
                                                      @PathVariable Long id,
-                                                     @RequestParam(value = "dateDebut", required = false) LocalDateTime dateDebut,
-                                                     @RequestParam(value = "dateFin", required = false)LocalDateTime dateFin,
-                                                     @RequestParam(value = "titre", required = false) String titre,
+                                                     @RequestBody InternshipDto internshipDto,
                                                      @RequestParam(value = "internshipReport", required = false)MultipartFile internshipReport,
-                                                     @RequestParam(value = "internshipJournal", required = false) MultipartFile internshipJournal,
-                                                     @RequestParam(value = "motivationLetter", required = false) presentationRequest newState
+                                                     @RequestParam(value = "internshipJournal", required = false) MultipartFile internshipJournal
                                                         )
     {
         try {
@@ -60,12 +58,12 @@ public class InternshipController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String userEmail = authentication.getName();
             internshipService.updateInternship( id,
-                    dateDebut,
-                    dateFin,
-                    titre,
+                    internshipDto.getDateDebut(),
+                    internshipDto.getDateFin(),
+                    internshipDto.getTitre(),
                     internshipReport,
                     internshipJournal,
-                    newState,
+                    internshipDto.getState(),
                     userEmail
             );
             return ResponseEntity.ok().body(
