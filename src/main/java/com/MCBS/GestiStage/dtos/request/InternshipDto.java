@@ -6,8 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 public class InternshipDto {
     private Long id;
-    private LocalDateTime dateDebut;
-    private LocalDateTime dateFin;
+    private String dateDebut;
+    private String dateFin;
     private String titre;
     private MultipartFile internshipReport;
     private MultipartFile internshipJournal;
@@ -16,7 +16,7 @@ public class InternshipDto {
     public InternshipDto() {
     }
 
-    public InternshipDto(Long id, LocalDateTime dateDebut, LocalDateTime dateFin, String titre, MultipartFile internshipReport, MultipartFile internshipJournal, presentationRequest newState) {
+    public InternshipDto(Long id, String dateDebut, String dateFin, String titre, MultipartFile internshipReport, MultipartFile internshipJournal, presentationRequest newState) {
         this.id = id;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
@@ -30,11 +30,11 @@ public class InternshipDto {
         return id;
     }
 
-    public LocalDateTime getDateDebut() {
+    public String getDateDebut() {
         return dateDebut;
     }
 
-    public LocalDateTime getDateFin() {
+    public String getDateFin() {
         return dateFin;
     }
 
@@ -58,11 +58,11 @@ public class InternshipDto {
         this.id = id;
     }
 
-    public void setDateDebut(LocalDateTime dateDebut) {
+    public void setDateDebut(String dateDebut) {
         this.dateDebut = dateDebut;
     }
 
-    public void setDateFin(LocalDateTime dateFin) {
+    public void setDateFin(String dateFin) {
         this.dateFin = dateFin;
     }
 

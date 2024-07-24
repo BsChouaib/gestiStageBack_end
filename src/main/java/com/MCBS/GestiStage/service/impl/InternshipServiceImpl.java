@@ -43,8 +43,8 @@ public class InternshipServiceImpl implements InternshipService
 
     @Override
     public void updateInternship(Long id,
-                                 LocalDateTime dateDebut,
-                                 LocalDateTime dateFin,
+                                 String dateDebut,
+                                 String dateFin,
                                  String titre,
                                  MultipartFile internshipReport,
                                  MultipartFile internshipJournal,
@@ -58,10 +58,10 @@ public class InternshipServiceImpl implements InternshipService
         Internship internship = internshipRepository.findInternshipByInternshipId(id);
         if (user instanceof Admin) {
             if (dateDebut != null) {
-                internship.setDateDebut(dateDebut);
+                internship.setDateDebut(LocalDateTime.parse(dateDebut));
             }
             if (dateFin != null) {
-                internship.setDateFin(dateFin);
+                internship.setDateFin(LocalDateTime.parse(dateFin));
             }
             if (titre != null) {
                 internship.setTitre(titre);

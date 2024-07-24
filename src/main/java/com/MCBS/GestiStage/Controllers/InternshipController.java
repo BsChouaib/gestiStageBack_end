@@ -53,8 +53,8 @@ public class InternshipController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             Long id = formData.getId();
-            LocalDateTime dateDebut = formData.getDateDebut();
-            LocalDateTime dateFin = formData.getDateFin();
+            String dateDebut = formData.getDateDebut();
+            String dateFin = formData.getDateFin();
             String titre = formData.getTitre();
             MultipartFile internshipReport = formData.getInternshipReport();
             MultipartFile internshipJournal = formData.getInternshipJournal();

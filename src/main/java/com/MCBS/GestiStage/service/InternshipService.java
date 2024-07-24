@@ -12,8 +12,8 @@ import java.util.List;
 public interface InternshipService {
 
     void updateInternship(Long id,
-                          LocalDateTime dateDebut,
-                          LocalDateTime  dateFin,
+                          String dateDebut,
+                          String  dateFin,
                           String titre,
                           MultipartFile internshipReport,
                           MultipartFile internshipJournal,
