@@ -161,6 +161,24 @@ public class PresentationServiceImpl implements PresentationService {
         {
             presentation.setExternal(newPresentation.isExternal());
         }
+        if(newPresentation.getResult().getStatus()!= null)
+        {
+            PresentationResult result = presentationResultRepository.findPresentationResultById(presentation.getResult().getId());
+            result.setStatus(newPresentation.getResult().getStatus());
+            presentation.setResult(result);
+        }
+        if(newPresentation.getResult().getPassMark()!= null)
+        {
+            PresentationResult result = presentationResultRepository.findPresentationResultById(presentation.getResult().getId());
+            result.setPassMark(newPresentation.getResult().getPassMark());
+            presentation.setResult(result);
+        }
+        if(newPresentation.getResult().getRating()!= null)
+        {
+            PresentationResult result = presentationResultRepository.findPresentationResultById(presentation.getResult().getId());
+            result.setRating(newPresentation.getResult().getRating());
+            presentation.setResult(result);
+        }
         presentationRepository.save(presentation);
 
     }
