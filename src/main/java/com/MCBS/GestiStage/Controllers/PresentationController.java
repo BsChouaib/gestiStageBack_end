@@ -5,6 +5,7 @@ import com.MCBS.GestiStage.dtos.response.ApiDtoResponse;
 import com.MCBS.GestiStage.dtos.response.HttpResponse;
 import com.MCBS.GestiStage.dtos.response.InternshipDtoResponse;
 import com.MCBS.GestiStage.dtos.response.PresentationDtoResponse;
+import com.MCBS.GestiStage.enumerations.PresentationResultStatus;
 import com.MCBS.GestiStage.enumerations.presentationRequest;
 import com.MCBS.GestiStage.service.PresentationService;
 import io.swagger.annotations.Api;
@@ -158,5 +159,30 @@ public class PresentationController {
         ApiDtoResponse apiDtoResponse = new ApiDtoResponse("Presentation deleted successfully!!",
                 null);
         return ResponseEntity.ok(apiDtoResponse);
+    }
+
+
+
+    @PutMapping("/{id}/status")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    @ApiOperation("Validate presentation authorized by admin)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization",
+                    value = "Bearer access token",
+                    required = true,
+                    dataType = "string",
+                    paramType = "header")
+    })
+    public ResponseEntity<HttpResponse> validatePresentation(@PathVariable Long id, @RequestParam PresentationResultStatus newState)
+    {
+
+        presentationService.validationPresentation(id, newState);
+        return ResponseEntity.ok().body(
+                HttpResponse.builder()
+                        .timeStamp(new Date().toString())
+                        .message("Internship "+ newState)
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build());
     }
 }

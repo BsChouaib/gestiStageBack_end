@@ -5,11 +5,13 @@ import com.MCBS.GestiStage.dtos.request.PresentationDtoRequest;
 import com.MCBS.GestiStage.dtos.response.InternshipDtoResponse;
 import com.MCBS.GestiStage.dtos.response.PresentationDtoResponse;
 import com.MCBS.GestiStage.enumerations.PresentationResultStatus;
+import com.MCBS.GestiStage.enumerations.presentationRequest;
 import com.MCBS.GestiStage.exceptions.ApiRequestException;
 import com.MCBS.GestiStage.models.*;
 import com.MCBS.GestiStage.repository.AppUserRepository;
 import com.MCBS.GestiStage.repository.NotificationRepository;
 import com.MCBS.GestiStage.repository.PresentationRepository;
+import com.MCBS.GestiStage.repository.PresentationResultRepository;
 import com.MCBS.GestiStage.service.PresentationService;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +24,14 @@ import java.util.stream.Collectors;
 public class PresentationServiceImpl implements PresentationService {
 
     private final PresentationRepository presentationRepository;
+    private final PresentationResultRepository presentationResultRepository;
     private  final PresentationDtoConverter presentationDtoConverter;
     private final NotificationRepository notificationRepository;
     private final AppUserRepository appUserRepository;
 
-    public PresentationServiceImpl(PresentationRepository presentationRepository, PresentationDtoConverter presentationDtoConverter, NotificationRepository notificationRepository, AppUserRepository appUserRepository) {
+    public PresentationServiceImpl(PresentationRepository presentationRepository, PresentationResultRepository presentationResultRepository, PresentationDtoConverter presentationDtoConverter, NotificationRepository notificationRepository, AppUserRepository appUserRepository) {
         this.presentationRepository = presentationRepository;
+        this.presentationResultRepository = presentationResultRepository;
         this.presentationDtoConverter = presentationDtoConverter;
         this.notificationRepository = notificationRepository;
         this.appUserRepository = appUserRepository;
@@ -169,5 +173,19 @@ public class PresentationServiceImpl implements PresentationService {
             throw new ApiRequestException("Presentation dose not exist in DB!!!");
         }
         presentationRepository.delete(presentation);
+    }
+
+    @Override
+    public void validationPresentation(Long id, PresentationResultStatus newState) {
+        Presentation presentation = presentationRepository.findPresentationByPresentationId(id);
+        if (presentation == null)
+        {
+            throw new ApiRequestException("Presentation dose not exist in DB!!!");
+        }
+        PresentationResult result = presentationResultRepository.findPresentationResultById(presentation.getResult().getId());
+        result.setStatus(newState);
+        presentation.setResult(result);
+        presentationRepository.save(presentation);
+
     }
 }

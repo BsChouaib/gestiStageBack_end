@@ -3,10 +3,7 @@ package com.MCBS.GestiStage.models;
 import com.MCBS.GestiStage.enumerations.PresentationResultStatus;
 import lombok.Builder;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Builder
@@ -16,7 +13,7 @@ public class PresentationResult {
     Long id;
     private String passMark;
     private String rating;
-
+    @Enumerated(EnumType.STRING)
     private PresentationResultStatus status;
 
     public PresentationResult() {
